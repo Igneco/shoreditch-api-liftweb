@@ -27,19 +27,19 @@ libraryDependencies ++= Seq(
 //  }
 //}
 
-//sonatypeSettings
+sonatypeSettings
 
-//publishTo <<= version { project_version ⇒
-//  val nexus = "https://oss.sonatype.org/"
-//  if (project_version.trim.endsWith("SNAPSHOT"))
-//    Some("snapshots" at nexus + "content/repositories/snapshots")
-//  else
-//    Some("releases" at nexus + "service/local/staging/deploy/maven2")
-//}
+publishTo <<= version { project_version ⇒
+  val nexus = "https://oss.sonatype.org/"
+  if (project_version.trim.endsWith("SNAPSHOT"))
+    Some("snapshots" at nexus + "content/repositories/snapshots")
+  else
+    Some("releases" at nexus + "service/local/staging/deploy/maven2")
+}
 
-//publishMavenStyle := true
+publishMavenStyle := true
 
-//publishArtifact in Test := false
+publishArtifact in Test := false
 
 homepage := Some(url("https://github.com/alltonp/shoreditch-api-liftweb"))
 
