@@ -7,14 +7,14 @@ organization := "im.mange"
 
 version := Try(sys.env("TRAVIS_BUILD_NUMBER")).map("0.0." + _).getOrElse("1.0-SNAPSHOT")
 
-scalaVersion:= "2.11.5"
+scalaVersion:= "2.11.6"
 
 resolvers ++= Seq(
   "Sonatype OSS Releases" at "http://oss.sonatype.org/content/repositories/releases/"
 )
 
 libraryDependencies ++= Seq(
-  "net.liftweb" %% "lift-webkit" % "2.6.1",
+  "net.liftweb" %% "lift-webkit" % "2.6.1" % "provided",
   "im.mange" %% "shoreditch-api" % "0.0.65"
 )
 
