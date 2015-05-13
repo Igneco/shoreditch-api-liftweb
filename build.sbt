@@ -14,7 +14,7 @@ resolvers ++= Seq(
 )
 
 libraryDependencies ++= Seq(
-  "net.liftweb" %% "lift-webkit" % "2.6.1" % "provided",
+  "net.liftweb" %% "lift-webkit" % "[2.6.1,2.7.0]" % "provided",
   "im.mange" %% "shoreditch-api" % "0.0.65"
 )
 
