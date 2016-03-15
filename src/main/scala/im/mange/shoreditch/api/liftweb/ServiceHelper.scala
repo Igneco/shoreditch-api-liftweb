@@ -12,9 +12,9 @@ object ServiceHelper {
       POST0("action/" + path)(probeFn),
       OPTIONS0("action/" + path)(probeFn)
     )
-    def check(probeFn:                 ⇒ Check): Route[Service] = GET0("check/" + path)(probeFn)
-    def check(probeFn: (String)        ⇒ Check): Route[Service] = GET1("check/" + path)(probeFn)
-    def check(probeFn: (String,String) ⇒ Check): Route[Service] = GET2("check/" + path)(probeFn)
+    def check(probeFn:                 ⇒ Check): List[Route[Service]] = List(GET0("check/" + path)(probeFn))
+    def check(probeFn: (String)        ⇒ Check): List[Route[Service]] = List(GET1("check/" + path)(probeFn))
+    def check(probeFn: (String,String) ⇒ Check): List[Route[Service]] = List(GET2("check/" + path)(probeFn))
   }
 }
 
@@ -30,4 +30,22 @@ abstract class ServiceHelper(base: String, version: String, checksEnabled: Boole
       case x => throw new RuntimeException("I don't know how to run a: " + x)
     }
   }
+}
+
+
+//E.G.
+import ServiceHelper._
+
+//http://localhost:4253/booking/metadata
+object Booking extends ServiceHelper(
+  base = "booking",
+  version = "10001",
+  checksEnabled = true,
+  actionsEnabled = true
+)(
+    "make/payment/" action MakePayment
+  )
+
+case object MakePayment extends Action {
+  override def run(in: List[In]) = success(None)
 }
