@@ -65,8 +65,17 @@ object EnhancedRestHelper {
     def withBase(base: List[PathPart]): Route[Service] = new Route(rt, base ::: pathParts, fn)
   }
 
-  def POST[Service](pathstr: String)(fn: PartialFunction[List[String],Service]): Route[Service] = Route(PostRequest, pathstr, fn)
+  def POST[Service](pathstr: String)(fn: PartialFunction[List[String],Service]): Route[Service] = {
+    Route(PostRequest, pathstr, fn)
+  }
+
   def POST0[Service](pathstr: String)(fn: ⇒ Service): Route[Service] = POST(pathstr){ case Nil ⇒ fn }
+
+  def OPTIONS[Service](pathstr: String)(fn: PartialFunction[List[String],Service]): Route[Service] = {
+    Route(OptionsRequest, pathstr, fn)
+  }
+
+  def OPTIONS0[Service](pathstr: String)(fn: ⇒ Service): Route[Service] = OPTIONS(pathstr){case Nil ⇒ fn}
 
   def GET[Service](pathstr: String)(fn: PartialFunction[List[String],Service]): Route[Service] = Route(GetRequest, pathstr, fn)
   def GET0[Service](pathstr: String)(fn: ⇒ Service): Route[Service] = GET(pathstr){ case Nil ⇒ fn }
