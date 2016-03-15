@@ -12,7 +12,8 @@ object Runner {
     //TODO: we should definitely validate the json in our regular way here ...
     //TODO: we should definitely fold or map the json
     val r = try {
-      val in = if (req.json_?) Json.deserialiseIn(req.json.get) else Nil
+      val json = if (req.json_?) req.json.get else req.forcedBodyAsJson.get
+      val in = Json.deserialiseIn(json)
       a.run(in)
     }
     catch { case e: Throwable ⇒ a.failure(List(e.getMessage)) }
