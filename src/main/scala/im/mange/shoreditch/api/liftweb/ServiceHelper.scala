@@ -34,18 +34,18 @@ abstract class ServiceHelper(base: String, version: String, checksEnabled: Boole
 
 
 //E.G.
-import ServiceHelper._
-
-//http://localhost:4253/booking/metadata
-object Booking extends ServiceHelper(
-  base = "booking",
-  version = "10001",
-  checksEnabled = true,
-  actionsEnabled = true
-)(
-    "make/payment/" action MakePayment
-  )
-
-case object MakePayment extends Action {
-  override def run(in: List[In]) = success(None)
-}
+//import ServiceHelper._
+//
+////http://localhost:4253/booking/metadata
+//object Booking extends ServiceHelper(
+//  base = "booking",
+//  version = "10001",
+//  checksEnabled = true,
+//  actionsEnabled = true
+//)(
+//    "make/payment/" action MakePayment
+//  )
+//
+//case object MakePayment extends Action {
+//  override def run(in: List[In]) = success(None)
+//}
