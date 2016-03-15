@@ -6,8 +6,12 @@ import net.liftweb.http.{JsonResponse, LiftResponse, Req}
 import net.liftweb.common.{Box, Full}
 
 object ServiceHelper {
+  //TODO: if this works, add boolean generateOptionsForCors
   implicit class CheckRouteBuildingString(val path: String) extends AnyVal {
-    def action(probeFn:               ⇒ Action): Route[Service] = POST0("action/" + path)(probeFn)
+    def action(probeFn:               ⇒ Action): List[Route[Service]] = List(
+      POST0("action/" + path)(probeFn),
+      OPTIONS0("action/" + path)(probeFn)
+    )
     def check(probeFn:                 ⇒ Check): Route[Service] = GET0("check/" + path)(probeFn)
     def check(probeFn: (String)        ⇒ Check): Route[Service] = GET1("check/" + path)(probeFn)
     def check(probeFn: (String,String) ⇒ Check): Route[Service] = GET2("check/" + path)(probeFn)
