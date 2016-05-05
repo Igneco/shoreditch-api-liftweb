@@ -13,9 +13,11 @@ resolvers ++= Seq(
   "Sonatype OSS Releases" at "http://oss.sonatype.org/content/repositories/releases/"
 )
 
+resolvers     += Resolver.sonatypeRepo("releases")
+
 libraryDependencies ++= Seq(
   "net.liftweb" %% "lift-webkit" % "[2.6.1,2.7.0]" % "provided",
-  "im.mange" %% "shoreditch-api" % "[0.0.65,0.1.0]" % "provided"
+  "im.mange" %% "shoreditch-api" % "[0.0.68,0.1.0]" % "provided"
 )
 
 sonatypeSettings
