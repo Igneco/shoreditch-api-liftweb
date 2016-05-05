@@ -85,7 +85,7 @@ object EnhancedRestHelper {
 
 import im.mange.shoreditch.api.liftweb.EnhancedRestHelper._
 
-abstract class EnhancedRestHelper[Service](base: String = "", summary: String = "", version: String)(routes: Route[Service]*) extends RestHelper {
+abstract class EnhancedRestHelper[Service](longName: String = "", alias: String = "", base: String = "", summary: String = "", version: String)(routes: Route[Service]*) extends RestHelper {
   var actions = concurrent.TrieMap[String, Action]()
   var checks = concurrent.TrieMap[String, Check]()
 
@@ -113,7 +113,7 @@ abstract class EnhancedRestHelper[Service](base: String = "", summary: String = 
         val theActions = actions.map(a => ActionMetaData(a._1, a._2.parameters.in, a._2.parameters.out)).toList
         val theChecks = checks.map(c => CheckMetaData(c._1)).toList
 
-        val metaData = MetaDataResponse(version, theChecks, theActions)
+        val metaData = MetaDataResponse(longName, alias, version, theChecks, theActions)
         Full(JsonResponse(Json.serialise(metaData)))
       }
       val summaryRoute: Route[BoxedLiftResponse] = GET0(summary) {

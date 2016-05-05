@@ -18,8 +18,8 @@ object ServiceHelper {
   }
 }
 
-abstract class ServiceHelper(base: String, version: String, checksEnabled: Boolean, actionsEnabled: Boolean)(offerings: Route[Service]*)
-  extends EnhancedRestHelper[Service](base, "metadata", version)(offerings: _*) {
+abstract class ServiceHelper(longName: String, alias: String, base: String, version: String, checksEnabled: Boolean, actionsEnabled: Boolean)(offerings: Route[Service]*)
+  extends EnhancedRestHelper[Service](longName, alias, base, "metadata", version)(offerings: _*) {
 
   def xform(req: Req) = mkRunFunc(_, req)
 
