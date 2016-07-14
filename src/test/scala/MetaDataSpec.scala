@@ -3,14 +3,18 @@ import org.scalatest.{MustMatchers, WordSpec}
 import im.mange.shoreditch.api.Check
 import im.mange.shoreditch.api.Action
 import im.mange.shoreditch.api.In
-
 import scala.collection.concurrent.TrieMap
+
+//TODO: remove BoxedLiftResponse
+//TODO: remove Req
 
 class MetaDataSpec extends WordSpec with MustMatchers {
 
   "simple" in {
     Booking.checks mustEqual TrieMap("booking/check/alive" -> Alive)
     Booking.actions mustEqual TrieMap("booking/action/make/payment" -> MakePayment)
+
+//    Booking.xform(Request())
   }
 
 }
