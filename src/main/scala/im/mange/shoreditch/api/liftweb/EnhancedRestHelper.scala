@@ -101,27 +101,27 @@ abstract class EnhancedRestHelper[Service](longName: String = "", alias: String 
     case x => //???
   })
 
-  type BoxedLiftResponse = () ⇒ LiftResponse
+  type ShoreditchResponse = () ⇒ LiftResponse
 
   private val basePathParts = splitPath(base)
 
-  def xform(req: Request): Service ⇒ BoxedLiftResponse
+  def xform(req: Request): Service ⇒ ShoreditchResponse
 
   private val rebasedRoutes: Seq[Route[Service]] = routes.map { _ withBase basePathParts }
 
   //TODO: two things in here might explain the bogus GET listings we get ...
-  private def summaryHandler(req: Request): Option[BoxedLiftResponse] = {
+  private def summaryHandler(req: Request): Option[ShoreditchResponse] = {
     //TODO: not sure about this check actually ...
     if(summary.isEmpty) None
     else {
-      val summaryResponse: BoxedLiftResponse = () => {
+      val summaryResponse: ShoreditchResponse = () => {
         val theActions = actions.map(a => ActionMetaData(a._1, a._2.parameters.in, a._2.parameters.out)).toList
         val theChecks = checks.map(c => CheckMetaData(c._1)).toList
 
         val metaData = MetaDataResponse(longName, alias, version, theChecks, theActions)
         JsonResponse(Json.serialise(metaData))
       }
-      val summaryRoute: Route[BoxedLiftResponse] = GET0(summary) {
+      val summaryRoute: Route[ShoreditchResponse] = GET0(summary) {
         summaryResponse
       } withBase basePathParts
       summaryRoute.attemptMatch(req)
@@ -133,7 +133,7 @@ abstract class EnhancedRestHelper[Service](longName: String = "", alias: String 
   private def lazyAppliedMatches(req: Request) = matchers.iterator map { _(req) }
   private def firstMatchingRoute(req: Request) = lazyAppliedMatches(req).find(_.isDefined).flatten
 
-  def handler(req: Request) : Option[BoxedLiftResponse] =
+  def handler(req: Request) : Option[ShoreditchResponse] =
     firstMatchingRoute(req).map(xform(req)) orElse summaryHandler(req)
 
   //TODO: ultimately this must die ... but it is kind of important!

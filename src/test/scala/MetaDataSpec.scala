@@ -9,6 +9,7 @@ import scala.collection.concurrent.TrieMap
 
 //TODO: remove BoxedLiftResponse
 //TODO: remove Req
+//TODO: repackage and cut lift dependency on that package ......
 
 class MetaDataSpec extends WordSpec with MustMatchers {
 
@@ -30,9 +31,11 @@ class MetaDataSpec extends WordSpec with MustMatchers {
   "handles action requests" in {
     val maybeFunction = Booking.handler(SimpleRequest(JNothing, Seq("booking", "action", "make", "payment")))
     maybeFunction.isDefined mustEqual true
-
+    maybeFunction.get() mustEqual None
   }
 
+  //TODO: handles check requests with params
+  //TODO: handles action requests with params
 }
 
 import ServiceHelper._
@@ -54,5 +57,7 @@ case object Alive extends Check {
 }
 
 case object MakePayment extends Action {
-  override def run(in: List[In]) = success(None)
+  override def run(in: List[In]) = success(Some("paymentRef"))
 }
+
+//TODO: add failure cases ...
