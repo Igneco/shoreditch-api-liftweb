@@ -14,28 +14,32 @@ import scala.collection.concurrent.TrieMap
 class MetaDataSpec extends WordSpec with MustMatchers {
 
   "captures checks and actions" in {
-    Booking.checks mustEqual TrieMap("booking/check/alive" -> Alive)
-    Booking.actions mustEqual TrieMap("booking/action/make/payment" -> MakePayment)
+    Example.checks mustEqual TrieMap("base/check/successful/check" -> SuccessfulCheck)
+
+    Example.actions mustEqual TrieMap(
+      "base/action/successful/action" -> SuccessfulAction,
+      "base/action/successful/action/with/return" -> SuccessfulActionWithReturn
+    )
   }
 
   "handles missing requests" in {
-    Booking.handler(SimpleRequest(JNothing, Seq(""))) mustEqual None
+    Example.handler(SimpleRequest(JNothing, Seq(""))) mustEqual None
   }
 
   "handles check requests" in {
-    val maybeFunction = Booking.handler(SimpleRequest(JNothing, Seq("booking", "check", "alive")))
+    val maybeFunction = Example.handler(SimpleRequest(JNothing, Seq("base", "check", "successful", "check")))
     maybeFunction.isDefined mustEqual true
     maybeFunction.get() mustEqual None
   }
 
   "handles action requests" in {
-    val maybeFunction = Booking.handler(SimpleRequest(JNothing, Seq("booking", "action", "make", "payment")))
+    val maybeFunction = Example.handler(SimpleRequest(JNothing, Seq("base", "action", "successful", "action")))
     maybeFunction.isDefined mustEqual true
     maybeFunction.get() mustEqual None
   }
 
   "handles metadata requests" in {
-    val maybeFunction = Booking.handler(SimpleRequest(JNothing, Seq("booking", "metadata")))
+    val maybeFunction = Example.handler(SimpleRequest(JNothing, Seq("base", "metadata")))
     maybeFunction.isDefined mustEqual true
     maybeFunction.get() mustEqual None
   }
@@ -46,24 +50,29 @@ class MetaDataSpec extends WordSpec with MustMatchers {
 
 import ServiceHelper._
 
-object Booking extends ServiceHelper(
-  base = "booking",
+object Example extends ServiceHelper(
+  base = "base",
   version = "10001",
   checksEnabled = true,
   actionsEnabled = true,
-  longName = "Booking System",
-  alias = "booking"
+  longName = "Example System",
+  alias = "example"
 )(
-    "alive/" check Alive,
-    "make/payment/" action MakePayment
+    "successful/check/" check SuccessfulCheck,
+    "successful/action/" action SuccessfulAction,
+    "successful/action/with/return" action SuccessfulActionWithReturn
   )
 
-case object Alive extends Check {
+case object SuccessfulCheck extends Check {
   override def run = success
 }
 
-case object MakePayment extends Action {
-  override def run(in: List[In]) = success(Some("paymentRef"))
+case object SuccessfulAction extends Action {
+  override def run(in: List[In]) = success(None)
+}
+
+case object SuccessfulActionWithReturn extends Action {
+  override def run(in: List[In]) = success(Some("returnValue"))
 }
 
 //TODO: add failure cases ...
