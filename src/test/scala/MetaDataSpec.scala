@@ -45,12 +45,19 @@ class MetaDataSpec extends WordSpec with MustMatchers {
     maybeFunction.get() mustEqual None
   }
 
+  "handles check requests with args" in {
+    val maybeFunction = Example.handler(SimpleRequest(JNothing, Seq("base", "check", "successful", "check", "with", "args", "arg")))
+    maybeFunction.isDefined mustEqual true
+    maybeFunction.get() mustEqual None
+  }
+
   //TODO: handles check requests with params
   //TODO: handles action requests with params
 }
 
 import ServiceHelper._
 
+//TODO: ultimately rename me ...
 object Example extends ServiceHelper(
   base = "base",
   version = "10001",
