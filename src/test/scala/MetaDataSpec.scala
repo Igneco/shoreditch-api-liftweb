@@ -17,8 +17,16 @@ class MetaDataSpec extends WordSpec with MustMatchers {
     Booking.actions mustEqual TrieMap("booking/action/make/payment" -> MakePayment)
   }
 
-  "handles incoming requests" in {
-//    Booking.handler(SimpleRequest(JNothing)) mustEqual ""
+  "handles missing requests" in {
+    Booking.handler(SimpleRequest(JNothing, Seq(""))) mustEqual None
+  }
+
+  "handles check requests" in {
+    Booking.handler(SimpleRequest(JNothing, Seq("booking", "check", "alive"))) mustEqual None
+  }
+
+  "handles action requests" in {
+    Booking.handler(SimpleRequest(JNothing, Seq("booking", "action", "make", "payment"))) mustEqual None
   }
 
 }

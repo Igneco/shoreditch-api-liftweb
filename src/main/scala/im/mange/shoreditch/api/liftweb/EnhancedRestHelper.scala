@@ -48,12 +48,17 @@ object EnhancedRestHelper {
         case _ ⇒ ???
       }
 
-    def attemptMatch(req: Req) : Option[Service] = req match {
-      case Req(inboundPathParts, _, `rt`) ⇒
-        val pairs = pathParts zip inboundPathParts
+    def attemptMatch(req: Request) : Option[Service] = {
+      req match {
+        case Req(inboundPathParts, _, `rt`) ⇒
+        //        val pairs = pathParts zip inboundPathParts
+        //        val theMatch = recMatch(pairs)
+        //        theMatch map attemptFn
+        case _ ⇒ None
+      }
+        val pairs = pathParts zip req.inboundPathParts
         val theMatch = recMatch(pairs)
         theMatch map attemptFn
-      case _ ⇒ None
     }
 
     private def attemptFn(xs: List[String]): Service =
@@ -102,10 +107,10 @@ abstract class EnhancedRestHelper[Service](longName: String = "", alias: String 
 
   def xform(req: Request): Service ⇒ BoxedLiftResponse
 
-  private val rebasedRoutes = routes.map { _ withBase basePathParts }
+  private val rebasedRoutes: Seq[Route[Service]] = routes.map { _ withBase basePathParts }
 
   //TODO: two things in here might explain the bogus GET listings we get ...
-  private def summaryHandler(req: Req): Option[BoxedLiftResponse] = {
+  private def summaryHandler(req: Request): Option[BoxedLiftResponse] = {
     //TODO: not sure about this check actually ...
     if(summary.isEmpty) None
     else {
@@ -123,17 +128,16 @@ abstract class EnhancedRestHelper[Service](longName: String = "", alias: String 
     }
   }
 
-  private val matchers = rebasedRoutes map { r ⇒ r.attemptMatch _ }
+  private val matchers: Seq[(Request) => Option[Service]] = rebasedRoutes map { r ⇒ r.attemptMatch _ }
 
-  private def lazyAppliedMatches(req: Req) = matchers.iterator map { _(req) }
-  private def firstMatchingRoute(req: Req) = lazyAppliedMatches(req).find(_.isDefined).flatten
+  private def lazyAppliedMatches(req: Request) = matchers.iterator map { _(req) }
+  private def firstMatchingRoute(req: Request) = lazyAppliedMatches(req).find(_.isDefined).flatten
 
-  //TODO: this must live in liftweb
-  def handler(req: Req) : Option[BoxedLiftResponse] =
-    firstMatchingRoute(req).map(xform(LiftwebRequest(req))) orElse summaryHandler(req)
+  def handler(req: Request) : Option[BoxedLiftResponse] =
+    firstMatchingRoute(req).map(xform(req)) orElse summaryHandler(req)
 
   //TODO: ultimately this must die ...
-  serve {
-    Function unlift handler
-  }
+//  serve {
+//    Function unlift handler
+//  }
 }
