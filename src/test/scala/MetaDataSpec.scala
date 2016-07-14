@@ -34,6 +34,12 @@ class MetaDataSpec extends WordSpec with MustMatchers {
     maybeFunction.get() mustEqual None
   }
 
+  "handles metadata requests" in {
+    val maybeFunction = Booking.handler(SimpleRequest(JNothing, Seq("booking", "metadata")))
+    maybeFunction.isDefined mustEqual true
+    maybeFunction.get() mustEqual None
+  }
+
   //TODO: handles check requests with params
   //TODO: handles action requests with params
 }
