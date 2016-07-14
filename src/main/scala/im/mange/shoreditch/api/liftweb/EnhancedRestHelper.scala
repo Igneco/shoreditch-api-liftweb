@@ -136,7 +136,7 @@ abstract class EnhancedRestHelper[Service](longName: String = "", alias: String 
   def handler(req: Request) : Option[BoxedLiftResponse] =
     firstMatchingRoute(req).map(xform(req)) orElse summaryHandler(req)
 
-  //TODO: ultimately this must die ...
+  //TODO: ultimately this must die ... but it is kind of important!
 //  serve {
 //    Function unlift handler
 //  }
