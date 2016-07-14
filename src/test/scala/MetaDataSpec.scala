@@ -22,11 +22,15 @@ class MetaDataSpec extends WordSpec with MustMatchers {
   }
 
   "handles check requests" in {
-    Booking.handler(SimpleRequest(JNothing, Seq("booking", "check", "alive"))) mustEqual None
+    val maybeFunction = Booking.handler(SimpleRequest(JNothing, Seq("booking", "check", "alive")))
+    maybeFunction.isDefined mustEqual true
+//    maybeFunction.get().run() mustEqual None
   }
 
   "handles action requests" in {
-    Booking.handler(SimpleRequest(JNothing, Seq("booking", "action", "make", "payment"))) mustEqual None
+    val maybeFunction = Booking.handler(SimpleRequest(JNothing, Seq("booking", "action", "make", "payment")))
+    maybeFunction.isDefined mustEqual true
+
   }
 
 }
