@@ -21,12 +21,12 @@ object ServiceHelper {
 abstract class ServiceHelper(longName: String, alias: String, base: String, version: String, checksEnabled: Boolean, actionsEnabled: Boolean)(offerings: Route[Service]*)
   extends EnhancedRestHelper[Service](longName, alias, base, "metadata", version)(offerings: _*) {
 
-  def xform(req: Request): (Service) => () => Box[LiftResponse] = mkRunFunc(_, req)
+  def xform(req: Request): (Service) => () => LiftResponse = mkRunFunc(_, req)
 
-  private def mkRunFunc(t: Service, req: Request): () ⇒ Box[LiftResponse] = () ⇒ {
+  private def mkRunFunc(t: Service, req: Request): () ⇒ LiftResponse = () ⇒ {
     t match {
-      case a:Action if actionsEnabled ⇒ Full(JsonResponse(Json.serialise(Runner.run(a, req))))
-      case c:Check if checksEnabled ⇒ Full(JsonResponse(Json.serialise(Runner.run(c))))
+      case a:Action if actionsEnabled ⇒ JsonResponse(Json.serialise(Runner.run(a, req)))
+      case c:Check if checksEnabled ⇒ JsonResponse(Json.serialise(Runner.run(c)))
       case x => throw new RuntimeException("I don't know how to run a: " + x)
     }
   }

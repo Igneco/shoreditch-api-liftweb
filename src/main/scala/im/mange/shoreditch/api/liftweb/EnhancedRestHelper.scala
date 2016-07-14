@@ -101,7 +101,7 @@ abstract class EnhancedRestHelper[Service](longName: String = "", alias: String 
     case x => //???
   })
 
-  type BoxedLiftResponse = () ⇒ Box[LiftResponse]
+  type BoxedLiftResponse = () ⇒ LiftResponse
 
   private val basePathParts = splitPath(base)
 
@@ -119,7 +119,7 @@ abstract class EnhancedRestHelper[Service](longName: String = "", alias: String 
         val theChecks = checks.map(c => CheckMetaData(c._1)).toList
 
         val metaData = MetaDataResponse(longName, alias, version, theChecks, theActions)
-        Full(JsonResponse(Json.serialise(metaData)))
+        JsonResponse(Json.serialise(metaData))
       }
       val summaryRoute: Route[BoxedLiftResponse] = GET0(summary) {
         summaryResponse
