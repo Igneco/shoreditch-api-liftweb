@@ -8,12 +8,11 @@ import im.mange.shoreditch.api.{Check, Action}
 
 object Runner {
   //TODO: this needs the post'ed input
-  def run(a: Action, req: Req) = {
+  def run(a: Action, req: Request) = {
     //TODO: we should definitely validate the json in our regular way here ...
     //TODO: we should definitely fold or map the json
     val r = try {
-      val json = if (req.json_?) req.json.get else req.forcedBodyAsJson.get
-      val in = Json.deserialiseIn(json)
+      val in = Json.deserialiseIn(req.json)
       a.run(in)
     }
     catch { case e: Throwable ⇒ a.failure(List(e.getMessage)) }

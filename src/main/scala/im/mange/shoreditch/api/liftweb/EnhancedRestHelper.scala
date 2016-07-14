@@ -100,7 +100,7 @@ abstract class EnhancedRestHelper[Service](longName: String = "", alias: String 
 
   private val basePathParts = splitPath(base)
 
-  def xform(req: Req): Service ⇒ BoxedLiftResponse
+  def xform(req: Request): Service ⇒ BoxedLiftResponse
 
   private val rebasedRoutes = routes.map { _ withBase basePathParts }
 
@@ -128,8 +128,9 @@ abstract class EnhancedRestHelper[Service](longName: String = "", alias: String 
   private def lazyAppliedMatches(req: Req) = matchers.iterator map { _(req) }
   private def firstMatchingRoute(req: Req) = lazyAppliedMatches(req).find(_.isDefined).flatten
 
-  private def handler(req: Req) : Option[BoxedLiftResponse] =
-    firstMatchingRoute(req).map(xform(req)) orElse summaryHandler(req)
+  //TODO: this must live in liftweb
+  def handler(req: Req) : Option[BoxedLiftResponse] =
+    firstMatchingRoute(req).map(xform(LiftwebRequest(req))) orElse summaryHandler(req)
 
   //TODO: ultimately this must die ...
   serve {

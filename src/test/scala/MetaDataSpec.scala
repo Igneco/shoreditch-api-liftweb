@@ -1,8 +1,10 @@
-import im.mange.shoreditch.api.liftweb.ServiceHelper
+import im.mange.shoreditch.api.liftweb.{ServiceHelper, SimpleRequest}
 import org.scalatest.{MustMatchers, WordSpec}
 import im.mange.shoreditch.api.Check
 import im.mange.shoreditch.api.Action
 import im.mange.shoreditch.api.In
+import net.liftweb.json.JsonAST.JNothing
+
 import scala.collection.concurrent.TrieMap
 
 //TODO: remove BoxedLiftResponse
@@ -10,11 +12,13 @@ import scala.collection.concurrent.TrieMap
 
 class MetaDataSpec extends WordSpec with MustMatchers {
 
-  "simple" in {
+  "captures checks and actions" in {
     Booking.checks mustEqual TrieMap("booking/check/alive" -> Alive)
     Booking.actions mustEqual TrieMap("booking/action/make/payment" -> MakePayment)
+  }
 
-//    Booking.xform(Request())
+  "handles incoming requests" in {
+//    Booking.handler(SimpleRequest(JNothing)) mustEqual ""
   }
 
 }

@@ -8,10 +8,10 @@ import scala.Some
 
 //TODO: is this still needed?
 trait RestHelper extends net.liftweb.http.rest.RestHelper {
-  def runAction(a: ⇒ Action, req: Req): () ⇒ Box[LiftResponse] = { () ⇒ doRun(a, req) }
+  def runAction(a: ⇒ Action, req: Request): () ⇒ Box[LiftResponse] = { () ⇒ doRun(a, req) }
   def runCheck(c: ⇒ Check): () ⇒ Box[LiftResponse] = { () ⇒ doRun(c) }
 
-  private def doRun(a: => Action, req: Req): Full[LiftResponse] = {
+  private def doRun(a: => Action, req: Request): Full[LiftResponse] = {
     Full(JsonResponse(Json.serialise(Runner.run(a, req))))
   }
 
