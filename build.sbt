@@ -17,7 +17,8 @@ resolvers     += Resolver.sonatypeRepo("releases")
 
 libraryDependencies ++= Seq(
   "net.liftweb" %% "lift-webkit" % "[2.6.1,2.7.0]" % "provided",
-  "im.mange" %% "shoreditch-api" % "[0.0.68,0.1.0]" % "provided"
+  "im.mange" %% "shoreditch-api" % "[0.0.68,0.1.0]" % "provided",
+  "org.scalatest" % "scalatest_2.11" % "[2.2.1,2.3.0]" % "test"
 )
 
 sonatypeSettings
