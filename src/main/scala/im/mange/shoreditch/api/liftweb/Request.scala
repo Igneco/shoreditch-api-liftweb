@@ -15,7 +15,7 @@ trait Request {
 
 //TODO: rename to LiftwebToShoreditchRequestAdaptor
 //TODO: and put the response stuff n here too ... so as little code as possible ...
-case class LiftwebRequest(req: Req) extends Request {
+case class LiftwebToShoreditchRequestAdaptor(req: Req) extends Request {
 //  val json = if (req.json_?) req.json.getOrElse("") else req.forcedBodyAsJson.getOrElse("")
   val json = req.forcedBodyAsJson match {
     case Full(j) => {
