@@ -7,29 +7,30 @@ import net.liftweb.common.Full
 import scala.Some
 
 //TODO: is this still needed?
+//TODO: ultimately do not extend net.liftweb.http.rest.RestHelper
 trait RestHelper extends net.liftweb.http.rest.RestHelper {
-  def runAction(a: ⇒ Action, req: Request): () ⇒ Box[LiftResponse] = { () ⇒ doRun(a, req) }
-  def runCheck(c: ⇒ Check): () ⇒ Box[LiftResponse] = { () ⇒ doRun(c) }
+//  def runAction(a: ⇒ Action, req: Request): () ⇒ Box[LiftResponse] = { () ⇒ doRun(a, req) }
+//  def runCheck(c: ⇒ Check): () ⇒ Box[LiftResponse] = { () ⇒ doRun(c) }
 
-  private def doRun(a: => Action, req: Request): Full[LiftResponse] = {
-    Full(JsonResponse(Json.serialise(Runner.run(a, req))))
-  }
+//  private def doRun(a: => Action, req: Request): Full[LiftResponse] = {
+//    Full(JsonResponse(Json.serialise(Runner.run(a, req))))
+//  }
 
-  private def doRun(c: => Check): Full[LiftResponse] = {
-    Full(JsonResponse(Json.serialise(Runner.run(c))))
-  }
+//  private def doRun(c: => Check): Full[LiftResponse] = {
+//    Full(JsonResponse(Json.serialise(Runner.run(c))))
+//  }
 
-  object GET {
-    def unapplySeq(in: Req): Option[Seq[String]] = in match {
-      case Req(out, _, GetRequest) ⇒ Some(out)
-      case _ ⇒ None
-    }
-  }
+//  object GET {
+//    def unapplySeq(in: Req): Option[Seq[String]] = in match {
+//      case Req(out, _, GetRequest) ⇒ Some(out)
+//      case _ ⇒ None
+//    }
+//  }
 
-  object POST {
-    def unapplySeq(in: Req): Option[Seq[String]] = in match {
-      case Req(out, _, PostRequest) ⇒ Some(out)
-      case _ ⇒ None
-    }
-  }
+//  object POST {
+//    def unapplySeq(in: Req): Option[Seq[String]] = in match {
+//      case Req(out, _, PostRequest) ⇒ Some(out)
+//      case _ ⇒ None
+//    }
+//  }
 }
