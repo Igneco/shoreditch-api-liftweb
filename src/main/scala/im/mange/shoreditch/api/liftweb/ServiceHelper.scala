@@ -22,8 +22,8 @@ object ServiceHelper {
 }
 
 //TODO: ultimately rename me ...
-abstract class ServiceHelper(longName: String, alias: String, base: String, version: String, checksEnabled: Boolean, actionsEnabled: Boolean)(routes: Route[Service]*)
-  extends EnhancedRestHelper[Service](longName, alias, base, "metadata", version)(routes: _*) {
+abstract class ServiceHelper(longName: String, alias: String, base: String, version: String, checksEnabled: Boolean, actionsEnabled: Boolean)(routes: Route[Service]*) {
+//  extends EnhancedRestHelper[Service](longName, alias, base, "metadata", version)(routes: _*) {
 
   val shoreditch = Shoreditch(base, version, longName, alias, "metadata", routes)
 
