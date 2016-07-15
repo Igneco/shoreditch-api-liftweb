@@ -6,7 +6,7 @@ import im.mange.shoreditch.api.liftweb.Route
 
 import scala.collection.concurrent
 
-class ShoreditchHandler[Service](shoreditch: Shoreditch[Service]) {
+class ShoreditchHandler(shoreditch: Shoreditch) {
   var actions = concurrent.TrieMap[String, Action]()
   var checks = concurrent.TrieMap[String, Check]()
 

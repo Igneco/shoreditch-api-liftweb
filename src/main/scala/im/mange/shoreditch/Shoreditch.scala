@@ -5,7 +5,7 @@ import im.mange.shoreditch.api.liftweb.EnhancedRestHelper._
 import im.mange.shoreditch.api.liftweb.Route
 
 //TODO: should be no api.liftweb deps in here
-case class Shoreditch[Service](base: String,
+case class Shoreditch(base: String,
                                version: String,
                                longName: String,
                                alias: String,
