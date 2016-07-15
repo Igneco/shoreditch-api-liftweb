@@ -2,6 +2,9 @@ package im.mange.shoreditch.api.liftweb
 
 import net.liftweb.http._
 
+//TODO: remove dep on RequestType
+//TODO: remove dep on liftweb
+//TODO: rename to RouteFinder or something
 object EnhancedRestHelper {
   sealed trait PathPart { def simpleString: String }
   case class StaticPathPart(str: String) extends PathPart { def simpleString = str }
