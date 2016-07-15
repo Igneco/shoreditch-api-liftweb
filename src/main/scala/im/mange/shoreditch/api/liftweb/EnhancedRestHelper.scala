@@ -1,7 +1,7 @@
 package im.mange.shoreditch.api.liftweb
 
 import im.mange.shoreditch.api._
-import net.liftweb.common.{Box, Full}
+//import net.liftweb.common.{Box, Full}
 import net.liftweb.http._
 import net.liftweb.json.JValue
 
@@ -92,7 +92,7 @@ object EnhancedRestHelper {
 
 import im.mange.shoreditch.api.liftweb.EnhancedRestHelper._
 
-abstract class EnhancedRestHelper[Service](longName: String = "", alias: String = "", base: String = "", summary: String = "", version: String)(routes: Route[Service]*) extends RestHelper {
+abstract class EnhancedRestHelper[Service](longName: String = "", alias: String = "", base: String = "", summary: String = "", version: String)(routes: Route[Service]*) /*extends RestHelper*/ {
   var actions = concurrent.TrieMap[String, Action]()
   var checks = concurrent.TrieMap[String, Check]()
 
