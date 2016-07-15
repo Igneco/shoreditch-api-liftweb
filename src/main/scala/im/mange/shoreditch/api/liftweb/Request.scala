@@ -30,6 +30,8 @@ case class LiftwebRequest(req: Req) extends Request {
     case Req(x, _, _) ⇒ x
     case _ ⇒ Nil
   }
+
+  override def toString = s"$inboundPathParts => ${json}"
 }
 
 case class SimpleRequest(json: String, inboundPathParts: Seq[String]) extends Request {
