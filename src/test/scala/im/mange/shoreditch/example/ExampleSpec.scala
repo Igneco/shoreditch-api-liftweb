@@ -17,34 +17,34 @@ class ExampleSpec extends WordSpec with MustMatchers {
   }
 
   "handles missing requests" in {
-    shoreditch.handle(SimpleRequest(Seq(""))) mustEqual None
+    shoreditch.handle(SimpleRequest("")) mustEqual None
   }
 
   "handles check requests" in {
-    val response = shoreditch.handle(SimpleRequest(Seq("base", "check", "successful", "check")))
+    val response = shoreditch.handle(SimpleRequest("base/check/successful/check"))
     response mustEqual Some("""{"failures":[]}""")
   }
 
   "handles action requests" in {
-    val response = shoreditch.handle(SimpleRequest(Seq("base", "action", "successful", "action")))
+    val response = shoreditch.handle(SimpleRequest("base/action/successful/action"))
     response mustEqual Some("""{"failures":[]}""")
   }
 
   "handles metadata requests" in {
-    val response = shoreditch.handle(SimpleRequest(Seq("base", "metadata")))
+    val response = shoreditch.handle(SimpleRequest("base/metadata"))
     response mustEqual
       Some("""{"name":"Example System","alias":"example","version":"10001","checks":[{"url":"base/check/successful/check"},{"url":"base/check/successful/check/with/arg"}],"actions":[{"url":"base/action/successful/action","in":[]},{"url":"base/action/successful/action/with/return","in":[]}]}""")
   }
 
   "handles check requests with args" in {
-    val response = shoreditch.handle(SimpleRequest(Seq("base", "check", "successful", "check", "with", "args", "arg")))
+    val response = shoreditch.handle(SimpleRequest("base/check/successful/check/with/args/arg"))
     response mustEqual Some("""{"failures":[]}""")
   }
 
   //BUG: this seems to run a check, maybe the first it finds?
   //TODO: making / be the same as /metadata might help ...
   "handles index requests" in {
-    val response = shoreditch.handle(SimpleRequest(Seq("base")))
+    val response = shoreditch.handle(SimpleRequest("base"))
     response mustEqual Some("""{"failures":[]}""")
   }
 

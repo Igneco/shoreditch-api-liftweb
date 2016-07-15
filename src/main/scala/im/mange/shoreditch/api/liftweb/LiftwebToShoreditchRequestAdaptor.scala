@@ -8,7 +8,12 @@ import net.liftweb.json._
 
 //TODO: and put the response stuff n here too ... so as little code as possible ...
 case class LiftwebToShoreditchRequestAdaptor(req: Req) extends Request {
-//  val json = if (req.json_?) req.json.getOrElse("") else req.forcedBodyAsJson.getOrElse("")
+
+  val path = req match {
+    case Req(x, _, _) ⇒ x.mkString("/")
+    case _ ⇒ ""
+  }
+
   val json = req.forcedBodyAsJson match {
     case Full(j) => {
       val theFormats = Serialization.formats(NoTypeHints)
@@ -18,12 +23,7 @@ case class LiftwebToShoreditchRequestAdaptor(req: Req) extends Request {
     case _ => ""
   }
 
-  val inboundPathParts = req match {
-    case Req(x, _, _) ⇒ x
-    case _ ⇒ Nil
-  }
-
-  override def toString = s"$inboundPathParts => ${json}"
+  override def toString = s"$path => ${json}"
 
 //  def handle(shoreditch: Shoreditch) = {
 //    val handler = Booking.handler(request)

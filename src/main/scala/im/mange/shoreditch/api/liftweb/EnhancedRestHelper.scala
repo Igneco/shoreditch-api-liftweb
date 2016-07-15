@@ -48,7 +48,7 @@ object EnhancedRestHelper {
       }
 
     def attemptMatch(req: Request) : Option[Service] = {
-      val pairs = pathParts zip req.inboundPathParts
+      val pairs = pathParts zip req.path.split("/")
       val theMatch = recMatch(pairs)
       theMatch map attemptFn
     }
