@@ -5,13 +5,13 @@ import im.mange.shoreditch.handler.HttpMethodPartialFunctions._
 import im.mange.shoreditch.handler.{Request, Route, ShoreditchHandler}
 
 //TODO: should be no api.liftweb deps in here
-case class Shoreditch(base: String,
-                               version: String,
-                               longName: String,
-                               alias: String,
-                               checksEnabled: Boolean = true,
-                               actionsEnabled: Boolean = true,
-                               routes: Seq[Route[Service]]) {
+case class Shoreditch(base: String = "shoreditch",
+                      version: String,
+                      longName: String,
+                      alias: String,
+                      checksEnabled: Boolean = true,
+                      actionsEnabled: Boolean = true,
+                      routes: Seq[Route[Service]]) {
 
   private val handler = new ShoreditchHandler(this)
 
