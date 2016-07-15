@@ -15,7 +15,7 @@ case class LiftwebRequest(req: Req) extends Request {
   val json = if (req.json_?) req.json.getOrElse("") else req.forcedBodyAsJson..getOrElse("")
 
   val inboundPathParts = req match {
-    case Req(x, _, _) ⇒ x
+    case Req(x, _, _) ⇒ println(s"params: ${req.params}"); x
     case _ ⇒ Nil
 
   }
