@@ -1,8 +1,7 @@
 package im.mange.shoreditch
 
-import im.mange.shoreditch.api._
+import im.mange.shoreditch.api.{Request, _}
 import im.mange.shoreditch.api.liftweb.EnhancedRestHelper._
-import im.mange.shoreditch.api.liftweb.Request
 
 //TODO: should be no api.liftweb deps in here
 case class Shoreditch[Service](base: String,

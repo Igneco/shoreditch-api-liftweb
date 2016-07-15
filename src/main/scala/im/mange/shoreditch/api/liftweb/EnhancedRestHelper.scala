@@ -1,5 +1,6 @@
 package im.mange.shoreditch.api.liftweb
 
+import im.mange.shoreditch.api.Request
 import net.liftweb.http._
 
 //TODO: remove dep on RequestType
