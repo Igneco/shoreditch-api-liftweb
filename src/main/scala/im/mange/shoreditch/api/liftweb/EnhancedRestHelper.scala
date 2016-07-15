@@ -2,13 +2,8 @@ package im.mange.shoreditch.api.liftweb
 
 import im.mange.shoreditch.Shoreditch
 import im.mange.shoreditch.api._
-//import net.liftweb.common.{Box, Full}
 import net.liftweb.http._
-import net.liftweb.json.JValue
 
-import scala.collection.concurrent
-
-//TODO: rename to AutoIndexRestHelper or something
 object EnhancedRestHelper {
   sealed trait PathPart { def simpleString: String }
   case class StaticPathPart(str: String) extends PathPart { def simpleString = str }
@@ -31,8 +26,7 @@ object EnhancedRestHelper {
   class Route[Service] private (rt: RequestType, pathParts: List[PathPart], fn: PartialFunction[List[String], Service]) {
     lazy val pathStr = pathParts.map(_.simpleString).mkString("/")
 
-    //TODO: this is nasty
-    //TODO: this should have an escape after too many attempts...
+    //TODO: this is nasty - this should have an escape after too many attempts...
     val service = {
       var attempt: List[String] = Nil
       while (!fn.isDefinedAt(attempt)) {
@@ -52,13 +46,6 @@ object EnhancedRestHelper {
       }
 
     def attemptMatch(req: Request) : Option[Service] = {
-//      req match {
-//        case Req(inboundPathParts, _, `rt`) ⇒
-//        //        val pairs = pathParts zip inboundPathParts
-//        //        val theMatch = recMatch(pairs)
-//        //        theMatch map attemptFn
-//        case _ ⇒ None
-//      }
       val pairs = pathParts zip req.inboundPathParts
       val theMatch = recMatch(pairs)
       theMatch map attemptFn
@@ -73,15 +60,13 @@ object EnhancedRestHelper {
     def withBase(base: List[PathPart]): Route[Service] = new Route(rt, base ::: pathParts, fn)
   }
 
-  def POST[Service](pathstr: String)(fn: PartialFunction[List[String],Service]): Route[Service] = {
+  def POST[Service](pathstr: String)(fn: PartialFunction[List[String],Service]): Route[Service] =
     Route(PostRequest, pathstr, fn)
-  }
 
   def POST0[Service](pathstr: String)(fn: ⇒ Service): Route[Service] = POST(pathstr){ case Nil ⇒ fn }
 
-  def OPTIONS[Service](pathstr: String)(fn: PartialFunction[List[String],Service]): Route[Service] = {
+  def OPTIONS[Service](pathstr: String)(fn: PartialFunction[List[String],Service]): Route[Service] =
     Route(OptionsRequest, pathstr, fn)
-  }
 
   def OPTIONS0[Service](pathstr: String)(fn: ⇒ Service): Route[Service] = OPTIONS(pathstr){case Nil ⇒ fn}
 
