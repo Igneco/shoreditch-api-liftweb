@@ -1,17 +1,13 @@
 import im.mange.shoreditch.Shoreditch
+import im.mange.shoreditch.api.{Action, Check, In}
 import im.mange.shoreditch.api.liftweb.{ServiceHelper, SimpleRequest}
 import org.scalatest.{MustMatchers, WordSpec}
-import im.mange.shoreditch.api.Check
-import im.mange.shoreditch.api.Action
-import im.mange.shoreditch.api.In
-import net.liftweb.json.JsonAST.JNothing
 
 import scala.collection.concurrent.TrieMap
 
-//TODO: remove BoxedLiftResponse
-//TODO: remove Req
 //TODO: repackage and cut lift dependency on that package ......
-
+//TODO: big repackage
+//TODO: better naming
 class MetaDataSpec extends WordSpec with MustMatchers {
 
   "captures checks and actions" in {
@@ -61,11 +57,12 @@ class MetaDataSpec extends WordSpec with MustMatchers {
     maybeFunction.get() mustEqual """{"failures":[]}"""
   }
 
-  //TODO: handles check requests with params
+  //TODO: handles check requests with params - using args
   //TODO: handles action requests with params
+  //TODO: add failure cases ...
 }
 
-import ServiceHelper._
+import im.mange.shoreditch.api.liftweb.ServiceHelper._
 
 object Example extends ServiceHelper(
   Shoreditch(
@@ -97,5 +94,3 @@ case object SuccessfulAction extends Action {
 case object SuccessfulActionWithReturn extends Action {
   override def run(in: List[In]) = success(Some("returnValue"))
 }
-
-//TODO: add failure cases ...
