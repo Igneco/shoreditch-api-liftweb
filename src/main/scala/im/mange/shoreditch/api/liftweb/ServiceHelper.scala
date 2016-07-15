@@ -78,21 +78,3 @@ abstract class ServiceHelper(longName: String, alias: String, base: String, vers
     }
   }
 }
-
-
-//E.G.
-//import ServiceHelper._
-//
-////http://localhost:4253/booking/metadata
-//object Booking extends ServiceHelper(
-//  base = "booking",
-//  version = "10001",
-//  checksEnabled = true,
-//  actionsEnabled = true
-//)(
-//    "make/payment/" action MakePayment
-//  )
-//
-//case object MakePayment extends Action {
-//  override def run(in: List[In]) = success(None)
-//}
