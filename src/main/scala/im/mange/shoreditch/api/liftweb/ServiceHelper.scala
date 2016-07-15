@@ -2,9 +2,9 @@ package im.mange.shoreditch.api.liftweb
 
 import im.mange.shoreditch.api._
 import im.mange.shoreditch.api.liftweb.EnhancedRestHelper._
-import net.liftweb.http.{JsonResponse, LiftResponse, Req}
-import net.liftweb.common.{Box, Full}
-import net.liftweb.json.JValue
+//import net.liftweb.http.{JsonResponse, LiftResponse, Req}
+//import net.liftweb.common.{Box, Full}
+//import net.liftweb.json.JValue
 
 object ServiceHelper {
   //TODO: if this works, add boolean generateOptionsForCors
@@ -19,6 +19,7 @@ object ServiceHelper {
   }
 }
 
+//TODO: ultimately rename me ...
 abstract class ServiceHelper(longName: String, alias: String, base: String, version: String, checksEnabled: Boolean, actionsEnabled: Boolean)(offerings: Route[Service]*)
   extends EnhancedRestHelper[Service](longName, alias, base, "metadata", version)(offerings: _*) {
 

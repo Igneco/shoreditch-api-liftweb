@@ -58,7 +58,6 @@ class MetaDataSpec extends WordSpec with MustMatchers {
 
 import ServiceHelper._
 
-//TODO: ultimately rename me ...
 object Example extends ServiceHelper(
   base = "base",
   version = "10001",
