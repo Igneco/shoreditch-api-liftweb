@@ -1,19 +1,11 @@
-package im.mange.shoreditch.api.liftweb
-
-import net.liftweb.http._
-import im.mange.shoreditch.api.{Action, Check, Json, Request}
-
-//TODO: kill println's or use a real logger (like reprobate)
-//TODO: this needs to be made Lift-neutral ... removing Req and LiftResponse etc
+package im.mange.shoreditch.api
 
 object Runner {
   import net.liftweb.json._
-  import net.liftweb.json.Serialization._
 
   //TODO: this needs the post'ed input
   def run(a: Action, req: Request) = {
     //TODO: we should definitely validate the json in our regular way here ...
-    //TODO: we should definitely fold or map the json
     val r = try {
       val in = Json.deserialiseIn(parse(req.json))
       a.run(in)

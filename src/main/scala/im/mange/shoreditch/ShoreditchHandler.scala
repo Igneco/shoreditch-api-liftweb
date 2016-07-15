@@ -2,7 +2,6 @@ package im.mange.shoreditch
 
 import im.mange.shoreditch.api._
 import im.mange.shoreditch.api.liftweb.EnhancedRestHelper._
-import im.mange.shoreditch.api.liftweb.Runner
 
 import scala.collection.concurrent
 
