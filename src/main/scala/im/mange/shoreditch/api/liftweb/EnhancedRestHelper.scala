@@ -1,5 +1,6 @@
 package im.mange.shoreditch.api.liftweb
 
+import im.mange.shoreditch.Shoreditch
 import im.mange.shoreditch.api._
 //import net.liftweb.common.{Box, Full}
 import net.liftweb.http._
@@ -93,16 +94,17 @@ object EnhancedRestHelper {
 import im.mange.shoreditch.api.liftweb.EnhancedRestHelper._
 
 abstract class EnhancedRestHelper[Service](longName: String = "", alias: String = "", base: String = "", summary: String = "", version: String)(routes: Route[Service]*) /*extends RestHelper*/ {
-  var actions = concurrent.TrieMap[String, Action]()
-  var checks = concurrent.TrieMap[String, Check]()
-
-  //TODO: should be foreach
-  routes.map(r =>
-    r.service match {
-    case a:Action => actions.update(base + "/" + r.pathStr, a)
-    case c:Check => checks.update(base + "/" + r.pathStr, c)
-    case x => //???
-  })
+  val shoredtich = Shoreditch(base, routes)
+//  var actions = concurrent.TrieMap[String, Action]()
+//  var checks = concurrent.TrieMap[String, Check]()
+//
+//  //TODO: should be foreach
+//  routes.map(r =>
+//    r.service match {
+//    case a:Action => actions.update(base + "/" + r.pathStr, a)
+//    case c:Check => checks.update(base + "/" + r.pathStr, c)
+//    case x => //???
+//  })
 
 //  type ShoreditchResponse = () ⇒ LiftResponse
 //  type ShoreditchResponse = () ⇒ JValue
@@ -120,8 +122,8 @@ abstract class EnhancedRestHelper[Service](longName: String = "", alias: String 
     if(summary.isEmpty) None
     else {
       val summaryResponse: ShoreditchResponse = () => {
-        val theActions = actions.map(a => ActionMetaData(a._1, a._2.parameters.in, a._2.parameters.out)).toList
-        val theChecks = checks.map(c => CheckMetaData(c._1)).toList
+        val theActions = shoredtich.actions.map(a => ActionMetaData(a._1, a._2.parameters.in, a._2.parameters.out)).toList
+        val theChecks = shoredtich.checks.map(c => CheckMetaData(c._1)).toList
 
         val metaData = MetaDataResponse(longName, alias, version, theChecks, theActions)
         Json.serialise(metaData)
