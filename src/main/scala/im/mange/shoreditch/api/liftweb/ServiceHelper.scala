@@ -6,6 +6,7 @@ import im.mange.shoreditch.api.liftweb.EnhancedRestHelper._
 //import net.liftweb.common.{Box, Full}
 //import net.liftweb.json.JValue
 
+//TODO: ultimate rename Shoreditch and have one import
 object ServiceHelper {
   //TODO: if this works, add boolean generateOptionsForCors
   implicit class CheckRouteBuildingString(val path: String) extends AnyVal {

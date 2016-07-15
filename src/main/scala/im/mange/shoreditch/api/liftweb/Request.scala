@@ -33,7 +33,7 @@ case class LiftwebToShoreditchRequestAdaptor(req: Req) extends Request {
 
   override def toString = s"$inboundPathParts => ${json}"
 
-//  def handle() = {
+//  def handle(shoreditch: Shoreditch) = {
 //    val handler = Booking.handler(request)
 //    //      val handler = Cleared.handler(new LiftwebRequest(req))
 //    println(handler)
@@ -46,6 +46,8 @@ case class LiftwebToShoreditchRequestAdaptor(req: Req) extends Request {
 //  }
 
 }
+
+
 
 case class SimpleRequest(json: String, inboundPathParts: Seq[String]) extends Request {
 }
