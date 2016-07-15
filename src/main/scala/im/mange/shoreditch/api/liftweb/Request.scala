@@ -32,6 +32,19 @@ case class LiftwebToShoreditchRequestAdaptor(req: Req) extends Request {
   }
 
   override def toString = s"$inboundPathParts => ${json}"
+
+//  def handle() = {
+//    val handler = Booking.handler(request)
+//    //      val handler = Cleared.handler(new LiftwebRequest(req))
+//    println(handler)
+//
+//    val response: LiftResponse = handler match {
+//      case None => PlainTextResponse("Nothing to see here")
+//      case Some(j) => JsonResponse(parse(j()))
+//    }
+//    Full(response)
+//  }
+
 }
 
 case class SimpleRequest(json: String, inboundPathParts: Seq[String]) extends Request {
