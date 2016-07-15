@@ -95,19 +95,7 @@ import im.mange.shoreditch.api.liftweb.EnhancedRestHelper._
 
 abstract class EnhancedRestHelper[Service](longName: String = "", alias: String = "", base: String = "", summary: String = "", version: String)(routes: Route[Service]*) /*extends RestHelper*/ {
   val shoredtich = Shoreditch(base, routes)
-//  var actions = concurrent.TrieMap[String, Action]()
-//  var checks = concurrent.TrieMap[String, Check]()
-//
-//  //TODO: should be foreach
-//  routes.map(r =>
-//    r.service match {
-//    case a:Action => actions.update(base + "/" + r.pathStr, a)
-//    case c:Check => checks.update(base + "/" + r.pathStr, c)
-//    case x => //???
-//  })
 
-//  type ShoreditchResponse = () ⇒ LiftResponse
-//  type ShoreditchResponse = () ⇒ JValue
   type ShoreditchResponse = () ⇒ String
 
   private val basePathParts = splitPath(base)
