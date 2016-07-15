@@ -3,6 +3,7 @@ package im.mange.shoreditch.api.liftweb
 import im.mange.shoreditch.Shoreditch
 import im.mange.shoreditch.api._
 import im.mange.shoreditch.api.liftweb.EnhancedRestHelper._
+import scala.collection.concurrent
 
 //TODO: ultimate rename Shoreditch and have one import
 object ServiceHelper {
@@ -15,8 +16,22 @@ object ServiceHelper {
 }
 
 //TODO: ultimately rename me ...
+//TODO: move this stuff into a ShoreditchHandler() and have minimal stuff in Shoreditch() itself
+//TODO: and pass in a Shoreditch ..
 abstract class ServiceHelper(longName: String, alias: String, base: String, version: String, checksEnabled: Boolean, actionsEnabled: Boolean)(routes: Route[Service]*) {
   val shoreditch = Shoreditch(base, version, longName, alias, "metadata", routes)
+
+  var actions = concurrent.TrieMap[String, Action]()
+  var checks = concurrent.TrieMap[String, Check]()
+
+  //TODO: should be foreach
+  routes.map(r =>
+    r.service match {
+      case a:Action => actions.update(base + "/" + r.pathStr, a)
+      case c:Check => checks.update(base + "/" + r.pathStr, c)
+      case x => //???
+    })
+
 
   def handler(req: Request) : Option[ShoreditchResponse] =
     firstMatchingRoute(req).map(xform(req)) orElse summaryHandler(req)
@@ -33,8 +48,8 @@ abstract class ServiceHelper(longName: String, alias: String, base: String, vers
     if(shoreditch.summary.isEmpty) None
     else {
       val summaryResponse: ShoreditchResponse = () => {
-        val theActions = shoreditch.actions.map(a => ActionMetaData(a._1, a._2.parameters.in, a._2.parameters.out)).toList
-        val theChecks = shoreditch.checks.map(c => CheckMetaData(c._1)).toList
+        val theActions = actions.map(a => ActionMetaData(a._1, a._2.parameters.in, a._2.parameters.out)).toList
+        val theChecks = checks.map(c => CheckMetaData(c._1)).toList
 
         val metaData = MetaDataResponse(longName, alias, version, theChecks, theActions)
         Json.serialise(metaData)

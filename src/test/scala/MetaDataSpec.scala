@@ -14,10 +14,10 @@ import scala.collection.concurrent.TrieMap
 class MetaDataSpec extends WordSpec with MustMatchers {
 
   "captures checks and actions" in {
-    Example.shoreditch.checks.size mustEqual 2
-    Example.shoreditch.checks.head mustEqual "base/check/successful/check" -> SuccessfulCheck
+    Example.checks.size mustEqual 2
+    Example.checks.head mustEqual "base/check/successful/check" -> SuccessfulCheck
 
-    Example.shoreditch.actions mustEqual TrieMap(
+    Example.actions mustEqual TrieMap(
       "base/action/successful/action" -> SuccessfulAction,
       "base/action/successful/action/with/return" -> SuccessfulActionWithReturn
     )
