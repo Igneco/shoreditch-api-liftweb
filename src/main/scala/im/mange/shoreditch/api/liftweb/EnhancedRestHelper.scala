@@ -1,15 +1,14 @@
 package im.mange.shoreditch.api.liftweb
 
 import im.mange.shoreditch.api.Request
-import net.liftweb.http._
 
 sealed trait PathPart { def simpleString: String }
 case class StaticPathPart(str: String) extends PathPart { def simpleString = str }
 case class DynPathPart(name: String) extends PathPart { def simpleString = "@" + name }
 
 object Route {
-  def apply[Service](rt: RequestType, path: String, fn: PartialFunction[List[String], Service]): Route[Service] = {
-    new Route[Service](rt, splitPath(path), fn)
+  def apply[Service](requestMethod: String, path: String, fn: PartialFunction[List[String], Service]): Route[Service] = {
+    new Route[Service](requestMethod, splitPath(path), fn)
   }
 
   def splitPath(str: String): List[PathPart] = {
@@ -21,7 +20,7 @@ object Route {
   }
 }
 
-class Route[Service] private (requestMethod: RequestType, pathParts: List[PathPart], fn: PartialFunction[List[String], Service]) {
+class Route[Service] private (requestMethod: String, pathParts: List[PathPart], fn: PartialFunction[List[String], Service]) {
   lazy val pathStr = pathParts.map(_.simpleString).mkString("/")
 
   //TODO: this is nasty - this should have an escape after too many attempts...
@@ -59,21 +58,20 @@ class Route[Service] private (requestMethod: RequestType, pathParts: List[PathPa
 }
 
 
-//TODO: remove dep on RequestType
 //TODO: remove dep on liftweb
 //TODO: rename to RouteFinder or something
 object EnhancedRestHelper {
   def POST[Service](pathstr: String)(fn: PartialFunction[List[String],Service]): Route[Service] =
-    Route(PostRequest, pathstr, fn)
+    Route("POST", pathstr, fn)
 
   def POST0[Service](pathstr: String)(fn: ⇒ Service): Route[Service] = POST(pathstr){ case Nil ⇒ fn }
 
   def OPTIONS[Service](pathstr: String)(fn: PartialFunction[List[String],Service]): Route[Service] =
-    Route(OptionsRequest, pathstr, fn)
+    Route("OPTIONS", pathstr, fn)
 
   def OPTIONS0[Service](pathstr: String)(fn: ⇒ Service): Route[Service] = OPTIONS(pathstr){case Nil ⇒ fn}
 
-  def GET[Service](pathstr: String)(fn: PartialFunction[List[String],Service]): Route[Service] = Route(GetRequest, pathstr, fn)
+  def GET[Service](pathstr: String)(fn: PartialFunction[List[String],Service]): Route[Service] = Route("GET", pathstr, fn)
   def GET0[Service](pathstr: String)(fn: ⇒ Service): Route[Service] = GET(pathstr){ case Nil ⇒ fn }
   def GET1[Service](pathstr: String)(fn: String ⇒ Service): Route[Service] = GET(pathstr){ case List(x) ⇒ fn(x) }
   def GET2[Service](pathstr: String)(fn: (String,String) ⇒ Service): Route[Service] = GET(pathstr){ case List(x1,x2) ⇒ fn(x1,x2) }
