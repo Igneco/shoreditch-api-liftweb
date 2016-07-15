@@ -7,5 +7,6 @@ import im.mange.shoreditch.api.liftweb.EnhancedRestHelper._
 //TODO: see if we can whack summary
 //TODO: decide what is mandatory and use Options
 case class Shoreditch[Service](base: String, version: String, longName: String = "", alias: String = "",
-                               checksEnabled: Boolean, actionsEnabled: Boolean,
+                               checksEnabled: Boolean = true,
+                               actionsEnabled: Boolean = true,
                                routes: Seq[Route[Service]])

@@ -19,7 +19,7 @@ object ServiceHelper {
 //TODO: move this stuff into a ShoreditchHandler() and have minimal stuff in Shoreditch() itself
 //TODO: and pass in a Shoreditch ..
 abstract class ServiceHelper(longName: String, alias: String, base: String, version: String, checksEnabled: Boolean, actionsEnabled: Boolean)(routes: Route[Service]*) {
-  val shoreditch = Shoreditch(base, version, longName, alias, checksEnabled, actionsEnabled, routes)
+  val shoreditch = Shoreditch(base, version, longName, alias, routes = routes)
 
   var actions = concurrent.TrieMap[String, Action]()
   var checks = concurrent.TrieMap[String, Check]()
