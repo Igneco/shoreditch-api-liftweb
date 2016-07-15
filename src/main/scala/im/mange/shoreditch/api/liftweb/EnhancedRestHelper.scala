@@ -79,7 +79,7 @@ object EnhancedRestHelper {
 import im.mange.shoreditch.api.liftweb.EnhancedRestHelper._
 
 abstract class EnhancedRestHelper[Service](longName: String = "", alias: String = "", base: String = "", summary: String = "", version: String)(routes: Route[Service]*) {
-  val shoreditch = Shoreditch(base, routes)
+  val shoreditch = Shoreditch(base, version, longName, alias, summary, routes)
 
   type ShoreditchResponse = () ⇒ String
 
