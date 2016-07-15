@@ -30,25 +30,26 @@ class MetaDataSpec extends WordSpec with MustMatchers {
   "handles check requests" in {
     val maybeFunction = Example.handler(SimpleRequest(JNothing, Seq("base", "check", "successful", "check")))
     maybeFunction.isDefined mustEqual true
-    maybeFunction.get() mustEqual None
+    maybeFunction.get() mustEqual """{"failures":[]}"""
   }
 
   "handles action requests" in {
     val maybeFunction = Example.handler(SimpleRequest(JNothing, Seq("base", "action", "successful", "action")))
     maybeFunction.isDefined mustEqual true
-    maybeFunction.get() mustEqual None
+    maybeFunction.get() mustEqual """{"failures":[]}"""
   }
 
   "handles metadata requests" in {
     val maybeFunction = Example.handler(SimpleRequest(JNothing, Seq("base", "metadata")))
     maybeFunction.isDefined mustEqual true
-    maybeFunction.get() mustEqual None
+    maybeFunction.get() mustEqual
+"""{"name":"Example System","alias":"example","version":"10001","checks":[{"url":"base/check/successful/check"},{"url":"base/check/successful/check/with/arg"}],"actions":[{"url":"base/action/successful/action","in":[]},{"url":"base/action/successful/action/with/return","in":[]}]}"""
   }
 
   "handles check requests with args" in {
     val maybeFunction = Example.handler(SimpleRequest(JNothing, Seq("base", "check", "successful", "check", "with", "args", "arg")))
     maybeFunction.isDefined mustEqual true
-    maybeFunction.get() mustEqual None
+    maybeFunction.get() mustEqual """{"failures":[]}"""
   }
 
   //TODO: handles check requests with params
