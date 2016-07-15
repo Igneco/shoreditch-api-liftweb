@@ -1,14 +1,9 @@
-import im.mange.shoreditch.api.{Action, Check, In}
-import im.mange.shoreditch.api.liftweb.SimpleRequest
-import im.mange.shoreditch.example.{Example, SuccessfulAction, SuccessfulActionWithReturn, SuccessfulCheck}
-import org.scalatest.{MustMatchers, WordSpec}
+package im.mange.shoreditch.example
 
+import org.scalatest.{MustMatchers, WordSpec}
 import scala.collection.concurrent.TrieMap
 
-//TODO: repackage and cut lift dependency on that package ......
-//TODO: big repackage
-//TODO: better naming
-class MetaDataSpec extends WordSpec with MustMatchers {
+class ExampleSpec extends WordSpec with MustMatchers {
   private val shoreditch = Example.shoreditch
 
   "captures checks and actions" in {
@@ -46,7 +41,7 @@ class MetaDataSpec extends WordSpec with MustMatchers {
     response mustEqual Some("""{"failures":[]}""")
   }
 
-  //TIP: this is a bug .. it seems to run a check, maybe the first it finds?
+  //BUG: this seems to run a check, maybe the first it finds?
   //TODO: making / be the same as /metadata might help ...
   "handles index requests" in {
     val response = shoreditch.handle(SimpleRequest("", Seq("base")))
@@ -57,8 +52,5 @@ class MetaDataSpec extends WordSpec with MustMatchers {
   //TODO: handles action requests with params
   //TODO: add failure cases ...
 }
-
-import im.mange.shoreditch._
-import Shoreditch._
 
 

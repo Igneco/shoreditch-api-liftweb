@@ -49,5 +49,4 @@ case class LiftwebToShoreditchRequestAdaptor(req: Req) extends Request {
 
 
 
-case class SimpleRequest(json: String, inboundPathParts: Seq[String]) extends Request {
-}
+
