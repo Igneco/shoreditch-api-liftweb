@@ -16,22 +16,16 @@ case class LiftwebToShoreditchRequestAdaptor(req: Req) extends Request {
 
   val json = req.forcedBodyAsJson match {
     case Full(j) => {
-      val theFormats = Serialization.formats(NoTypeHints)
-      implicit val formats = theFormats
+      implicit val formats = Serialization.formats(NoTypeHints)
       write(j)
     }
     case _ => ""
   }
 
-  def handle(shoreditch: Shoreditch) = {
-    val result = shoreditch.handle(this)
-
-    val response: LiftResponse = result match {
-      case None => PlainTextResponse("Nothing to see here")
-      case Some(j) => JsonResponse(parse(j))
-    }
-    Full(response)
-  }
+  def handle(shoreditch: Shoreditch) = Full(shoreditch.handle(this) match {
+    case None => PlainTextResponse("Nothing to see here")
+    case Some(j) => JsonResponse(parse(j))
+  })
 
   override def toString = s"$path => ${json}"
 }
