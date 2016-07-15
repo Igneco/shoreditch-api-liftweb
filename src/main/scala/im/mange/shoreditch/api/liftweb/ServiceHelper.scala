@@ -18,17 +18,17 @@ object ServiceHelper {
 //TODO: ultimately rename me ...
 //TODO: move this stuff into a ShoreditchHandler() and have minimal stuff in Shoreditch() itself
 //TODO: and pass in a Shoreditch ..
-abstract class ServiceHelper(longName: String, alias: String, base: String, version: String, checksEnabled: Boolean, actionsEnabled: Boolean)(routes: Route[Service]*) {
-  val shoreditch = Shoreditch(base, version, longName, alias, routes = routes)
+abstract class ServiceHelper(shoreditch: Shoreditch[Service]) {
+//  val shoreditch = Shoreditch(base, version, longName, alias, routes = routes)
 
   var actions = concurrent.TrieMap[String, Action]()
   var checks = concurrent.TrieMap[String, Check]()
 
   //TODO: should be foreach
-  routes.map(r =>
+  shoreditch.routes.map(r =>
     r.service match {
-      case a:Action => actions.update(base + "/" + r.pathStr, a)
-      case c:Check => checks.update(base + "/" + r.pathStr, c)
+      case a:Action => actions.update(shoreditch.base + "/" + r.pathStr, a)
+      case c:Check => checks.update(shoreditch.base + "/" + r.pathStr, c)
       case x => //???
     })
 
@@ -38,9 +38,9 @@ abstract class ServiceHelper(longName: String, alias: String, base: String, vers
 
   type ShoreditchResponse = () ⇒ String
 
-  private val basePathParts = splitPath(base)
+  private val basePathParts = splitPath(shoreditch.base)
 
-  private val rebasedRoutes: Seq[Route[Service]] = routes.map { _ withBase basePathParts }
+  private val rebasedRoutes: Seq[Route[Service]] = shoreditch.routes.map { _ withBase basePathParts }
 
   //TODO: two things in here might explain the bogus GET listings we get ...
   private def summaryHandler(req: Request): Option[ShoreditchResponse] = {
@@ -52,7 +52,7 @@ abstract class ServiceHelper(longName: String, alias: String, base: String, vers
         val theActions = actions.map(a => ActionMetaData(a._1, a._2.parameters.in, a._2.parameters.out)).toList
         val theChecks = checks.map(c => CheckMetaData(c._1)).toList
 
-        val metaData = MetaDataResponse(longName, alias, version, theChecks, theActions)
+        val metaData = MetaDataResponse(shoreditch.longName, shoreditch.alias, shoreditch.version, theChecks, theActions)
         Json.serialise(metaData)
       }
       val summaryRoute: Route[ShoreditchResponse] = GET0(summary) {
@@ -71,8 +71,8 @@ abstract class ServiceHelper(longName: String, alias: String, base: String, vers
 
   private def mkRunFunc(t: Service, req: Request): () ⇒ String = () ⇒ {
     t match {
-      case a:Action if actionsEnabled ⇒ Json.serialise(Runner.run(a, req))
-      case c:Check if checksEnabled ⇒ Json.serialise(Runner.run(c))
+      case a:Action if shoreditch.actionsEnabled ⇒ Json.serialise(Runner.run(a, req))
+      case c:Check if shoreditch.checksEnabled ⇒ Json.serialise(Runner.run(c))
       case x => throw new RuntimeException("I don't know how to run a: " + x)
     }
   }

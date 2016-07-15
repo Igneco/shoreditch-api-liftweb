@@ -1,3 +1,4 @@
+import im.mange.shoreditch.Shoreditch
 import im.mange.shoreditch.api.liftweb.{ServiceHelper, SimpleRequest}
 import org.scalatest.{MustMatchers, WordSpec}
 import im.mange.shoreditch.api.Check
@@ -67,18 +68,21 @@ class MetaDataSpec extends WordSpec with MustMatchers {
 import ServiceHelper._
 
 object Example extends ServiceHelper(
-  base = "base",
-  version = "10001",
-  checksEnabled = true,
-  actionsEnabled = true,
-  longName = "Example System",
-  alias = "example"
-)(
-    "successful/check/" check SuccessfulCheck,
-    "successful/check/with/arg" check SuccessfulCheckWithArg,
-    "successful/action/" action SuccessfulAction,
-    "successful/action/with/return" action SuccessfulActionWithReturn
+  Shoreditch(
+    base = "base",
+    version = "10001",
+    checksEnabled = true,
+    actionsEnabled = true,
+    longName = "Example System",
+    alias = "example",
+    routes = Seq(
+      "successful/check/" check SuccessfulCheck,
+      "successful/check/with/arg" check SuccessfulCheckWithArg,
+      "successful/action/" action SuccessfulAction,
+      "successful/action/with/return" action SuccessfulActionWithReturn
+    )
   )
+)
 
 case object SuccessfulCheck extends Check {
   override def run = success
