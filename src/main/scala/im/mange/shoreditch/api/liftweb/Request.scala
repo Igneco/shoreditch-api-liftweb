@@ -2,14 +2,12 @@ package im.mange.shoreditch.api.liftweb
 
 import net.liftweb.common.Full
 import net.liftweb.http.Req
-import net.liftweb.json.JValue
-import net.liftweb.json._
 import net.liftweb.json.Serialization._
+import net.liftweb.json._
 
 
 //TODO: move all of this back a level
 trait Request {
-  //TODO: ultimately this needs to be a String
   val json: String
   //TODO: ultimately this needs to be a String
   val inboundPathParts: Seq[String]
