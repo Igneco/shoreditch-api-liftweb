@@ -1,8 +1,9 @@
 package im.mange.shoreditch
 
 import im.mange.shoreditch.api.{Request, _}
-import im.mange.shoreditch.api.liftweb.HttpMethodPartialFunctions._
 import im.mange.shoreditch.api.liftweb.Route
+import im.mange.shoreditch.handler.HttpMethodPartialFunctions._
+import im.mange.shoreditch.handler.ShoreditchHandler
 
 //TODO: should be no api.liftweb deps in here
 case class Shoreditch(base: String,

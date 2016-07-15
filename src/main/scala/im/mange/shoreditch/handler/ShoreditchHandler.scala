@@ -1,8 +1,9 @@
-package im.mange.shoreditch
+package im.mange.shoreditch.handler
 
+import im.mange.shoreditch.Shoreditch
 import im.mange.shoreditch.api._
-import im.mange.shoreditch.api.liftweb.HttpMethodPartialFunctions._
 import im.mange.shoreditch.api.liftweb.Route
+import im.mange.shoreditch.handler.HttpMethodPartialFunctions._
 
 import scala.collection.concurrent
 
