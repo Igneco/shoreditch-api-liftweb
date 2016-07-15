@@ -9,7 +9,7 @@ import scala.collection.concurrent
 //TODO: ultimately rename me ...
 //TODO: move this stuff into a ShoreditchHandler() and have minimal stuff in Shoreditch() itself
 //TODO: and pass in a Shoreditch ..
-abstract class ShoreditchHandler(shoreditch: Shoreditch[Service]) {
+class ShoreditchHandler[Service](shoreditch: Shoreditch[Service]) {
   var actions = concurrent.TrieMap[String, Action]()
   var checks = concurrent.TrieMap[String, Check]()
 

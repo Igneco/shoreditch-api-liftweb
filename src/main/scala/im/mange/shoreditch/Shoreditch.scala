@@ -2,6 +2,7 @@ package im.mange.shoreditch
 
 import im.mange.shoreditch.api._
 import im.mange.shoreditch.api.liftweb.EnhancedRestHelper._
+import im.mange.shoreditch.api.liftweb.Request
 
 //TODO: should be no api.liftweb deps in here
 case class Shoreditch[Service](base: String,
@@ -10,7 +11,15 @@ case class Shoreditch[Service](base: String,
                                alias: String,
                                checksEnabled: Boolean = true,
                                actionsEnabled: Boolean = true,
-                               routes: Seq[Route[Service]])
+                               routes: Seq[Route[Service]]) {
+
+  private val handler = new ShoreditchHandler(this)
+
+  def handle(request: Request) = handler.handler(request).map(_())
+
+  val actions = handler.actions
+  val checks = handler.checks
+}
 
 object Shoreditch {
   implicit class CheckRouteBuildingString(val path: String) extends AnyVal {
