@@ -79,7 +79,7 @@ object EnhancedRestHelper {
 import im.mange.shoreditch.api.liftweb.EnhancedRestHelper._
 
 abstract class EnhancedRestHelper[Service](longName: String = "", alias: String = "", base: String = "", summary: String = "", version: String)(routes: Route[Service]*) /*extends RestHelper*/ {
-  val shoredtich = Shoreditch(base, routes)
+  val shoreditch = Shoreditch(base, routes)
 
   type ShoreditchResponse = () ⇒ String
 
@@ -95,8 +95,8 @@ abstract class EnhancedRestHelper[Service](longName: String = "", alias: String 
     if(summary.isEmpty) None
     else {
       val summaryResponse: ShoreditchResponse = () => {
-        val theActions = shoredtich.actions.map(a => ActionMetaData(a._1, a._2.parameters.in, a._2.parameters.out)).toList
-        val theChecks = shoredtich.checks.map(c => CheckMetaData(c._1)).toList
+        val theActions = shoreditch.actions.map(a => ActionMetaData(a._1, a._2.parameters.in, a._2.parameters.out)).toList
+        val theChecks = shoreditch.checks.map(c => CheckMetaData(c._1)).toList
 
         val metaData = MetaDataResponse(longName, alias, version, theChecks, theActions)
         Json.serialise(metaData)
