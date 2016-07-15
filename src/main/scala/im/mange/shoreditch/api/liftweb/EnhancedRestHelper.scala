@@ -78,7 +78,7 @@ object EnhancedRestHelper {
 
 import im.mange.shoreditch.api.liftweb.EnhancedRestHelper._
 
-abstract class EnhancedRestHelper[Service](longName: String = "", alias: String = "", base: String = "", summary: String = "", version: String)(routes: Route[Service]*) /*extends RestHelper*/ {
+abstract class EnhancedRestHelper[Service](longName: String = "", alias: String = "", base: String = "", summary: String = "", version: String)(routes: Route[Service]*) {
   val shoreditch = Shoreditch(base, routes)
 
   type ShoreditchResponse = () ⇒ String
@@ -120,9 +120,4 @@ abstract class EnhancedRestHelper[Service](longName: String = "", alias: String 
   //TODO: could seperate into two different endpoints checks - GET and actions - POST
   def handler(req: Request) : Option[ShoreditchResponse] =
     firstMatchingRoute(req).map(xform(req)) orElse summaryHandler(req)
-
-  //TODO: ultimately this must die ... but it is kind of important!
-//  serve {
-//    Function unlift handler
-//  }
 }
