@@ -1,7 +1,7 @@
 package im.mange.shoreditch
 
 import im.mange.shoreditch.api._
-import im.mange.shoreditch.api.liftweb.EnhancedRestHelper._
+import im.mange.shoreditch.api.liftweb.HttpMethodPartialFunctions._
 import im.mange.shoreditch.api.liftweb.Route
 
 import scala.collection.concurrent
