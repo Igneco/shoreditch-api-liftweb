@@ -1,4 +1,3 @@
-import im.mange.shoreditch.{Shoreditch, Shoreditch2, ShoreditchHandler}
 import im.mange.shoreditch.api.{Action, Check, In}
 import im.mange.shoreditch.api.liftweb.SimpleRequest
 import org.scalatest.{MustMatchers, WordSpec}
@@ -62,7 +61,8 @@ class MetaDataSpec extends WordSpec with MustMatchers {
   //TODO: add failure cases ...
 }
 
-import Shoreditch2._
+import im.mange.shoreditch._
+import Shoreditch._
 
 object Example extends ShoreditchHandler(
   Shoreditch(

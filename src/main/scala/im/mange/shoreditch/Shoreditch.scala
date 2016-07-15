@@ -12,8 +12,7 @@ case class Shoreditch[Service](base: String,
                                actionsEnabled: Boolean = true,
                                routes: Seq[Route[Service]])
 
-//TODO: ultimate rename Shoreditch and have one import
-object Shoreditch2 {
+object Shoreditch {
   implicit class CheckRouteBuildingString(val path: String) extends AnyVal {
     def action(f:                ⇒ Action): Route[Service] = POST0("action/" + path)(f)
     def check(f:                 ⇒ Check): Route[Service]  = GET0("check/" + path)(f)
