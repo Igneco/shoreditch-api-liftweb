@@ -1,7 +1,7 @@
 package im.mange.shoreditch.api.liftweb
 
 import net.liftweb.http._
-import im.mange.shoreditch.api.{Action, Check, Request}
+import im.mange.shoreditch.api.{Action, Check, Json, Request}
 
 //TODO: kill println's or use a real logger (like reprobate)
 //TODO: this needs to be made Lift-neutral ... removing Req and LiftResponse etc

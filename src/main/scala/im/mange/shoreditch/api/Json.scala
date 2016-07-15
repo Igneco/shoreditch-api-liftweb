@@ -1,11 +1,7 @@
-package im.mange.shoreditch.api.liftweb
+package im.mange.shoreditch.api
 
-import net.liftweb.json._
 import net.liftweb.json.Serialization._
-import im.mange.shoreditch.api.MetaDataResponse
-import im.mange.shoreditch.api.ActionResponse
-import im.mange.shoreditch.api.In
-import im.mange.shoreditch.api.CheckResponse
+import net.liftweb.json._
 
 object Json {
   private val theFormats = Serialization.formats(NoTypeHints)

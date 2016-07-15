@@ -2,25 +2,20 @@ package im.mange.shoreditch
 
 import im.mange.shoreditch.api._
 import im.mange.shoreditch.api.liftweb.EnhancedRestHelper._
-import im.mange.shoreditch.api.liftweb.{Json, Runner}
+import im.mange.shoreditch.api.liftweb.Runner
 
 import scala.collection.concurrent
 
-//TODO: ultimately rename me ...
-//TODO: move this stuff into a ShoreditchHandler() and have minimal stuff in Shoreditch() itself
-//TODO: and pass in a Shoreditch ..
 class ShoreditchHandler[Service](shoreditch: Shoreditch[Service]) {
   var actions = concurrent.TrieMap[String, Action]()
   var checks = concurrent.TrieMap[String, Check]()
 
-  //TODO: should be foreach
-  shoreditch.routes.map(r =>
+  shoreditch.routes.foreach(r =>
     r.service match {
       case a:Action => actions.update(shoreditch.base + "/" + r.pathStr, a)
       case c:Check => checks.update(shoreditch.base + "/" + r.pathStr, c)
       case x => //???
     })
-
 
   def handler(req: Request) : Option[ShoreditchResponse] =
     firstMatchingRoute(req).map(xform(req)) orElse summaryHandler(req)
@@ -28,7 +23,6 @@ class ShoreditchHandler[Service](shoreditch: Shoreditch[Service]) {
   type ShoreditchResponse = () ⇒ String
 
   private val basePathParts = splitPath(shoreditch.base)
-
   private val rebasedRoutes: Seq[Route[Service]] = shoreditch.routes.map { _ withBase basePathParts }
 
   //TODO: two things in here might explain the bogus GET listings we get ...
@@ -55,7 +49,6 @@ class ShoreditchHandler[Service](shoreditch: Shoreditch[Service]) {
 
   private def lazyAppliedMatches(req: Request) = matchers.iterator map { _(req) }
   private def firstMatchingRoute(req: Request) = lazyAppliedMatches(req).find(_.isDefined).flatten
-
   private def xform(req: Request): (Service) => () => String = mkRunFunc(_, req)
 
   private def mkRunFunc(t: Service, req: Request): () ⇒ String = () ⇒ {
