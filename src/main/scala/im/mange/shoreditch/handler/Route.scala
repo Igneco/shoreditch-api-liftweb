@@ -1,6 +1,4 @@
-package im.mange.shoreditch.api.liftweb
-
-import im.mange.shoreditch.api.Request
+package im.mange.shoreditch.handler
 
 sealed trait PathPart { def simpleString: String }
 case class StaticPathPart(str: String) extends PathPart { def simpleString = str }
@@ -56,5 +54,3 @@ class Route[Service] private (requestMethod: String, pathParts: List[PathPart], 
 
   def withBase(base: List[PathPart]): Route[Service] = new Route(requestMethod, base ::: pathParts, fn)
 }
-
-

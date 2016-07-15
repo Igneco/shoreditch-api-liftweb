@@ -1,7 +1,5 @@
 package im.mange.shoreditch.handler
 
-import im.mange.shoreditch.api.liftweb.Route
-
 object HttpMethodPartialFunctions {
   def POST[Service](pathstr: String)(fn: PartialFunction[List[String],Service]) = Route("POST", pathstr, fn)
   def POST0[Service](pathstr: String)(fn: ⇒ Service) = POST(pathstr){ case Nil ⇒ fn }

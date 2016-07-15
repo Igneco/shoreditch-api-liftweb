@@ -1,4 +1,6 @@
-package im.mange.shoreditch.api
+package im.mange.shoreditch.handler
+
+import im.mange.shoreditch.api.{Action, Check, Json}
 
 object Runner {
   import net.liftweb.json._

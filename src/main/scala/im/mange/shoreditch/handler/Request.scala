@@ -1,4 +1,4 @@
-package im.mange.shoreditch.api
+package im.mange.shoreditch.handler
 
 trait Request {
   val path: String

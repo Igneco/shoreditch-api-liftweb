@@ -1,7 +1,7 @@
 package im.mange.shoreditch.api.liftweb
 
 import im.mange.shoreditch.Shoreditch
-import im.mange.shoreditch.api.Request
+import im.mange.shoreditch.handler.Request
 import net.liftweb.common.Full
 import net.liftweb.http.{JsonResponse, LiftResponse, PlainTextResponse, Req}
 import net.liftweb.json.Serialization._
