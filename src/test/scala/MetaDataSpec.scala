@@ -71,8 +71,6 @@ object Example extends ServiceHelper(
   Shoreditch(
     base = "base",
     version = "10001",
-    checksEnabled = true,
-    actionsEnabled = true,
     longName = "Example System",
     alias = "example",
     routes = Seq(
