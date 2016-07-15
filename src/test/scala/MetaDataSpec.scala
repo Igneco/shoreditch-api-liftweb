@@ -1,6 +1,6 @@
-import im.mange.shoreditch.Shoreditch
+import im.mange.shoreditch.{Shoreditch, Shoreditch2, ShoreditchHandler}
 import im.mange.shoreditch.api.{Action, Check, In}
-import im.mange.shoreditch.api.liftweb.{ServiceHelper, SimpleRequest}
+import im.mange.shoreditch.api.liftweb.SimpleRequest
 import org.scalatest.{MustMatchers, WordSpec}
 
 import scala.collection.concurrent.TrieMap
@@ -62,9 +62,9 @@ class MetaDataSpec extends WordSpec with MustMatchers {
   //TODO: add failure cases ...
 }
 
-import im.mange.shoreditch.api.liftweb.ServiceHelper._
+import Shoreditch2._
 
-object Example extends ServiceHelper(
+object Example extends ShoreditchHandler(
   Shoreditch(
     base = "base",
     version = "10001",

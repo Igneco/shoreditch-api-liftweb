@@ -1,24 +1,15 @@
-package im.mange.shoreditch.api.liftweb
+package im.mange.shoreditch
 
-import im.mange.shoreditch.Shoreditch
 import im.mange.shoreditch.api._
 import im.mange.shoreditch.api.liftweb.EnhancedRestHelper._
-import scala.collection.concurrent
+import im.mange.shoreditch.api.liftweb.{Json, Request, Runner}
 
-//TODO: ultimate rename Shoreditch and have one import
-object ServiceHelper {
-  implicit class CheckRouteBuildingString(val path: String) extends AnyVal {
-    def action(f:                ⇒ Action): Route[Service] = POST0("action/" + path)(f)
-    def check(f:                 ⇒ Check): Route[Service]  = GET0("check/" + path)(f)
-    def check(f: (String)        ⇒ Check): Route[Service]  = GET1("check/" + path)(f)
-    def check(f: (String,String) ⇒ Check): Route[Service]  = GET2("check/" + path)(f)
-  }
-}
+import scala.collection.concurrent
 
 //TODO: ultimately rename me ...
 //TODO: move this stuff into a ShoreditchHandler() and have minimal stuff in Shoreditch() itself
 //TODO: and pass in a Shoreditch ..
-abstract class ServiceHelper(shoreditch: Shoreditch[Service]) {
+abstract class ShoreditchHandler(shoreditch: Shoreditch[Service]) {
   var actions = concurrent.TrieMap[String, Action]()
   var checks = concurrent.TrieMap[String, Check]()
 
