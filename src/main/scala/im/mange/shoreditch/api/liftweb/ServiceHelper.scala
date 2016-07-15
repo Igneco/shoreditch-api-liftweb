@@ -19,7 +19,7 @@ object ServiceHelper {
 //TODO: move this stuff into a ShoreditchHandler() and have minimal stuff in Shoreditch() itself
 //TODO: and pass in a Shoreditch ..
 abstract class ServiceHelper(longName: String, alias: String, base: String, version: String, checksEnabled: Boolean, actionsEnabled: Boolean)(routes: Route[Service]*) {
-  val shoreditch = Shoreditch(base, version, longName, alias, "metadata", routes)
+  val shoreditch = Shoreditch(base, version, longName, alias, routes)
 
   var actions = concurrent.TrieMap[String, Action]()
   var checks = concurrent.TrieMap[String, Check]()
@@ -45,7 +45,8 @@ abstract class ServiceHelper(longName: String, alias: String, base: String, vers
   //TODO: two things in here might explain the bogus GET listings we get ...
   private def summaryHandler(req: Request): Option[ShoreditchResponse] = {
     //TODO: not sure about this check actually ... it's stupid, remove it ...
-    if(shoreditch.summary.isEmpty) None
+    val summary = "metadata"
+    if (summary.isEmpty) None
     else {
       val summaryResponse: ShoreditchResponse = () => {
         val theActions = actions.map(a => ActionMetaData(a._1, a._2.parameters.in, a._2.parameters.out)).toList
@@ -54,7 +55,7 @@ abstract class ServiceHelper(longName: String, alias: String, base: String, vers
         val metaData = MetaDataResponse(longName, alias, version, theChecks, theActions)
         Json.serialise(metaData)
       }
-      val summaryRoute: Route[ShoreditchResponse] = GET0(shoreditch.summary) {
+      val summaryRoute: Route[ShoreditchResponse] = GET0(summary) {
         summaryResponse
       } withBase basePathParts
       summaryRoute.attemptMatch(req)
