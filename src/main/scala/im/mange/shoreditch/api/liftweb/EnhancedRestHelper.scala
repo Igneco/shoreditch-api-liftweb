@@ -3,13 +3,14 @@ package im.mange.shoreditch.api.liftweb
 import im.mange.shoreditch.api.Request
 import net.liftweb.http._
 
-//TODO: remove dep on RequestType
-//TODO: remove dep on liftweb
-//TODO: rename to RouteFinder or something
-object EnhancedRestHelper {
-  sealed trait PathPart { def simpleString: String }
-  case class StaticPathPart(str: String) extends PathPart { def simpleString = str }
-  case class DynPathPart(name: String) extends PathPart { def simpleString = "@" + name }
+sealed trait PathPart { def simpleString: String }
+case class StaticPathPart(str: String) extends PathPart { def simpleString = str }
+case class DynPathPart(name: String) extends PathPart { def simpleString = "@" + name }
+
+object Route {
+  def apply[Service](rt: RequestType, path: String, fn: PartialFunction[List[String], Service]): Route[Service] = {
+    new Route[Service](rt, splitPath(path), fn)
+  }
 
   def splitPath(str: String): List[PathPart] = {
     val pathParts: Array[PathPart] = str split '/' map {
@@ -18,50 +19,50 @@ object EnhancedRestHelper {
     }
     pathParts.toList
   }
+}
 
-  object Route {
-    def apply[Service](rt: RequestType, path: String, fn: PartialFunction[List[String], Service]): Route[Service] = {
-      new Route[Service](rt, splitPath(path), fn)
+class Route[Service] private (rt: RequestType, pathParts: List[PathPart], fn: PartialFunction[List[String], Service]) {
+  lazy val pathStr = pathParts.map(_.simpleString).mkString("/")
+
+  //TODO: this is nasty - this should have an escape after too many attempts...
+  val service = {
+    var attempt: List[String] = Nil
+    while (!fn.isDefinedAt(attempt)) {
+      attempt = "?" :: attempt
     }
+    fn.apply(attempt)
   }
 
-  class Route[Service] private (rt: RequestType, pathParts: List[PathPart], fn: PartialFunction[List[String], Service]) {
-    lazy val pathStr = pathParts.map(_.simpleString).mkString("/")
-
-    //TODO: this is nasty - this should have an escape after too many attempts...
-    val service = {
-      var attempt: List[String] = Nil
-      while (!fn.isDefinedAt(attempt)) {
-        attempt = "?" :: attempt
-      }
-      fn.apply(attempt)
+  @annotation.tailrec
+  private def recMatch(pairs: List[(PathPart,String)], acc: List[String] = Nil): Option[List[String]] =
+    pairs match {
+      case (StaticPathPart(exp), act) :: tail if exp == act ⇒ recMatch(tail, acc)
+      case (StaticPathPart(exp), act) :: tail ⇒ None
+      case (DynPathPart(_), act) :: tail ⇒ recMatch(tail, act :: acc)
+      case Nil ⇒ Some(acc.reverse)
+      case _ ⇒ ???
     }
 
-    @annotation.tailrec
-    private def recMatch(pairs: List[(PathPart,String)], acc: List[String] = Nil): Option[List[String]] =
-      pairs match {
-        case (StaticPathPart(exp), act) :: tail if exp == act ⇒ recMatch(tail, acc)
-        case (StaticPathPart(exp), act) :: tail ⇒ None
-        case (DynPathPart(_), act) :: tail ⇒ recMatch(tail, act :: acc)
-        case Nil ⇒ Some(acc.reverse)
-        case _ ⇒ ???
-      }
-
-    def attemptMatch(req: Request) : Option[Service] = {
-      val pairs = pathParts zip req.path.split("/")
-      val theMatch = recMatch(pairs)
-      theMatch map attemptFn
-    }
-
-    private def attemptFn(xs: List[String]): Service =
-      if (fn.isDefinedAt(xs)) { fn(xs) }
-      else {
-        throw new RuntimeException(s"The backing function for path $pathStr takes the wrong number of elements, but have: " + xs)
-      }
-
-    def withBase(base: List[PathPart]): Route[Service] = new Route(rt, base ::: pathParts, fn)
+  def attemptMatch(req: Request) : Option[Service] = {
+    val pairs = pathParts zip req.path.split("/")
+    val theMatch = recMatch(pairs)
+    theMatch map attemptFn
   }
 
+  private def attemptFn(xs: List[String]): Service =
+    if (fn.isDefinedAt(xs)) { fn(xs) }
+    else {
+      throw new RuntimeException(s"The backing function for path $pathStr takes the wrong number of elements, but have: " + xs)
+    }
+
+  def withBase(base: List[PathPart]): Route[Service] = new Route(rt, base ::: pathParts, fn)
+}
+
+
+//TODO: remove dep on RequestType
+//TODO: remove dep on liftweb
+//TODO: rename to RouteFinder or something
+object EnhancedRestHelper {
   def POST[Service](pathstr: String)(fn: PartialFunction[List[String],Service]): Route[Service] =
     Route(PostRequest, pathstr, fn)
 
