@@ -21,7 +21,7 @@ object Route {
   }
 }
 
-class Route[Service] private (rt: RequestType, pathParts: List[PathPart], fn: PartialFunction[List[String], Service]) {
+class Route[Service] private (requestMethod: RequestType, pathParts: List[PathPart], fn: PartialFunction[List[String], Service]) {
   lazy val pathStr = pathParts.map(_.simpleString).mkString("/")
 
   //TODO: this is nasty - this should have an escape after too many attempts...
@@ -55,7 +55,7 @@ class Route[Service] private (rt: RequestType, pathParts: List[PathPart], fn: Pa
       throw new RuntimeException(s"The backing function for path $pathStr takes the wrong number of elements, but have: " + xs)
     }
 
-  def withBase(base: List[PathPart]): Route[Service] = new Route(rt, base ::: pathParts, fn)
+  def withBase(base: List[PathPart]): Route[Service] = new Route(requestMethod, base ::: pathParts, fn)
 }
 
 
