@@ -52,6 +52,14 @@ class MetaDataSpec extends WordSpec with MustMatchers {
     maybeFunction.get() mustEqual """{"failures":[]}"""
   }
 
+  //TIP: this is a bug .. it seems to run a check, maybe the first it finds?
+  //TODO: making / be the same as /metadata might help ...
+  "handles index requests" in {
+    val maybeFunction = Example.handler(SimpleRequest("", Seq("base")))
+    maybeFunction.isDefined mustEqual true
+    maybeFunction.get() mustEqual """{"failures":[]}"""
+  }
+
   //TODO: handles check requests with params
   //TODO: handles action requests with params
 }

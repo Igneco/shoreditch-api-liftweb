@@ -138,6 +138,11 @@ abstract class EnhancedRestHelper[Service](longName: String = "", alias: String 
   private def lazyAppliedMatches(req: Request) = matchers.iterator map { _(req) }
   private def firstMatchingRoute(req: Request) = lazyAppliedMatches(req).find(_.isDefined).flatten
 
+  //TODO: checks need to be GET and actions need to be POST, but how if only 1 endpoint ...
+  //TODO: we really want shoreditch to mount as one endpoint ...
+  //TODO: could do post with a Cmd section? are we getting too far away from things?
+  //TODO: that would be annoying for reprobabte which really wants to do queries
+  //TODO: could seperate into two different endpoints checks - GET and actions - POST
   def handler(req: Request) : Option[ShoreditchResponse] =
     firstMatchingRoute(req).map(xform(req)) orElse summaryHandler(req)
 
