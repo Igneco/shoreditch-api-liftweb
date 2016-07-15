@@ -1,7 +1,5 @@
 package im.mange.shoreditch.api.liftweb
 
-import im.mange.shoreditch.Shoreditch
-import im.mange.shoreditch.api._
 import net.liftweb.http._
 
 object EnhancedRestHelper {
@@ -74,9 +72,4 @@ object EnhancedRestHelper {
   def GET0[Service](pathstr: String)(fn: ⇒ Service): Route[Service] = GET(pathstr){ case Nil ⇒ fn }
   def GET1[Service](pathstr: String)(fn: String ⇒ Service): Route[Service] = GET(pathstr){ case List(x) ⇒ fn(x) }
   def GET2[Service](pathstr: String)(fn: (String,String) ⇒ Service): Route[Service] = GET(pathstr){ case List(x1,x2) ⇒ fn(x1,x2) }
-}
-
-import im.mange.shoreditch.api.liftweb.EnhancedRestHelper._
-
-abstract class EnhancedRestHelper[Service](longName: String = "", alias: String = "", base: String = "", summary: String = "", version: String)(routes: Route[Service]*) {
 }
