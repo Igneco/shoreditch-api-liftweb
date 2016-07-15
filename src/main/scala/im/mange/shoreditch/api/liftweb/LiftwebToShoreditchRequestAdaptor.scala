@@ -3,6 +3,7 @@ package im.mange.shoreditch.api.liftweb
 import im.mange.shoreditch.Shoreditch
 import im.mange.shoreditch.handler.Request
 import net.liftweb.common.Full
+import net.liftweb.http.rest.RestHelper
 import net.liftweb.http.{JsonResponse, LiftResponse, PlainTextResponse, Req}
 import net.liftweb.json.Serialization._
 import net.liftweb.json._
@@ -29,3 +30,16 @@ case class LiftwebToShoreditchRequestAdaptor(req: Req) extends Request {
 
   override def toString = s"$path => ${json}"
 }
+
+case class ShoreditchRestHelper(shoreditch: Shoreditch) extends RestHelper {
+  serve {
+    case req @ (shoreditch.base :: extras) Any _ =>
+      LiftwebToShoreditchRequestAdaptor(req).handle(shoreditch)
+  }
+}
+
+protected object Any {
+  def unapply(r: Req): Option[(List[String], Req)] =
+    Some(r.path.partPath -> r)
+}
+
