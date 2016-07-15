@@ -1,5 +1,6 @@
 import im.mange.shoreditch.api.{Action, Check, In}
 import im.mange.shoreditch.api.liftweb.SimpleRequest
+import im.mange.shoreditch.example.{Example, SuccessfulAction, SuccessfulActionWithReturn, SuccessfulCheck}
 import org.scalatest.{MustMatchers, WordSpec}
 
 import scala.collection.concurrent.TrieMap
@@ -8,47 +9,47 @@ import scala.collection.concurrent.TrieMap
 //TODO: big repackage
 //TODO: better naming
 class MetaDataSpec extends WordSpec with MustMatchers {
-  private val example = Example.example
+  private val shoreditch = Example.shoreditch
 
   "captures checks and actions" in {
-    example.checks.size mustEqual 2
-    example.checks.head mustEqual "base/check/successful/check" -> SuccessfulCheck
+    shoreditch.checks.size mustEqual 2
+    shoreditch.checks.head mustEqual "base/check/successful/check" -> SuccessfulCheck
 
-    example.actions mustEqual TrieMap(
+    shoreditch.actions mustEqual TrieMap(
       "base/action/successful/action" -> SuccessfulAction,
       "base/action/successful/action/with/return" -> SuccessfulActionWithReturn
     )
   }
 
   "handles missing requests" in {
-    example.handle(SimpleRequest("", Seq(""))) mustEqual None
+    shoreditch.handle(SimpleRequest("", Seq(""))) mustEqual None
   }
 
   "handles check requests" in {
-    val response = example.handle(SimpleRequest("", Seq("base", "check", "successful", "check")))
+    val response = shoreditch.handle(SimpleRequest("", Seq("base", "check", "successful", "check")))
     response mustEqual Some("""{"failures":[]}""")
   }
 
   "handles action requests" in {
-    val response = example.handle(SimpleRequest("", Seq("base", "action", "successful", "action")))
+    val response = shoreditch.handle(SimpleRequest("", Seq("base", "action", "successful", "action")))
     response mustEqual Some("""{"failures":[]}""")
   }
 
   "handles metadata requests" in {
-    val response = example.handle(SimpleRequest("", Seq("base", "metadata")))
+    val response = shoreditch.handle(SimpleRequest("", Seq("base", "metadata")))
     response mustEqual
       Some("""{"name":"Example System","alias":"example","version":"10001","checks":[{"url":"base/check/successful/check"},{"url":"base/check/successful/check/with/arg"}],"actions":[{"url":"base/action/successful/action","in":[]},{"url":"base/action/successful/action/with/return","in":[]}]}""")
   }
 
   "handles check requests with args" in {
-    val response = example.handle(SimpleRequest("", Seq("base", "check", "successful", "check", "with", "args", "arg")))
+    val response = shoreditch.handle(SimpleRequest("", Seq("base", "check", "successful", "check", "with", "args", "arg")))
     response mustEqual Some("""{"failures":[]}""")
   }
 
   //TIP: this is a bug .. it seems to run a check, maybe the first it finds?
   //TODO: making / be the same as /metadata might help ...
   "handles index requests" in {
-    val response = example.handle(SimpleRequest("", Seq("base")))
+    val response = shoreditch.handle(SimpleRequest("", Seq("base")))
     response mustEqual Some("""{"failures":[]}""")
   }
 
@@ -60,33 +61,4 @@ class MetaDataSpec extends WordSpec with MustMatchers {
 import im.mange.shoreditch._
 import Shoreditch._
 
-object Example {
-  val example = Shoreditch(
-    base = "base",
-    version = "10001",
-    longName = "Example System",
-    alias = "example",
-    routes = Seq(
-      "successful/check/" check SuccessfulCheck,
-      "successful/check/with/arg" check SuccessfulCheckWithArg,
-      "successful/action/" action SuccessfulAction,
-      "successful/action/with/return" action SuccessfulActionWithReturn
-    )
-  )
-}
 
-case object SuccessfulCheck extends Check {
-  override def run = success
-}
-
-case class SuccessfulCheckWithArg(arg: String) extends Check {
-  override def run = success
-}
-
-case object SuccessfulAction extends Action {
-  override def run(in: List[In]) = success(None)
-}
-
-case object SuccessfulActionWithReturn extends Action {
-  override def run(in: List[In]) = success(Some("returnValue"))
-}
