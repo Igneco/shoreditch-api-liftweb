@@ -51,16 +51,16 @@ object EnhancedRestHelper {
       }
 
     def attemptMatch(req: Request) : Option[Service] = {
-      req match {
-        case Req(inboundPathParts, _, `rt`) ⇒
-        //        val pairs = pathParts zip inboundPathParts
-        //        val theMatch = recMatch(pairs)
-        //        theMatch map attemptFn
-        case _ ⇒ None
-      }
-        val pairs = pathParts zip req.inboundPathParts
-        val theMatch = recMatch(pairs)
-        theMatch map attemptFn
+//      req match {
+//        case Req(inboundPathParts, _, `rt`) ⇒
+//        //        val pairs = pathParts zip inboundPathParts
+//        //        val theMatch = recMatch(pairs)
+//        //        theMatch map attemptFn
+//        case _ ⇒ None
+//      }
+      val pairs = pathParts zip req.inboundPathParts
+      val theMatch = recMatch(pairs)
+      theMatch map attemptFn
     }
 
     private def attemptFn(xs: List[String]): Service =
