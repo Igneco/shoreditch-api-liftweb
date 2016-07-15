@@ -20,18 +20,17 @@ trait Request {
 case class LiftwebRequest(req: Req) extends Request {
 //  val json = if (req.json_?) req.json.getOrElse("") else req.forcedBodyAsJson.getOrElse("")
   val json = req.forcedBodyAsJson match {
-  case Full(j) => {
-    val theFormats = Serialization.formats(NoTypeHints)
-    implicit val formats = theFormats
-    write(j)
+    case Full(j) => {
+      val theFormats = Serialization.formats(NoTypeHints)
+      implicit val formats = theFormats
+      write(j)
+    }
+    case _ => ""
   }
-  case _ => ""
-}
 
   val inboundPathParts = req match {
-    case Req(x, _, _) ⇒ println(s"params: ${req.params}"); x
+    case Req(x, _, _) ⇒ x
     case _ ⇒ Nil
-
   }
 }
 
