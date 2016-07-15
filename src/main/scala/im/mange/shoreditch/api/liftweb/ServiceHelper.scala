@@ -31,8 +31,6 @@ abstract class ServiceHelper(longName: String, alias: String, base: String, vers
 
   private val basePathParts = splitPath(base)
 
-//  def xform(req: Request): Service ⇒ ShoreditchResponse
-
   private val rebasedRoutes: Seq[Route[Service]] = routes.map { _ withBase basePathParts }
 
   //TODO: two things in here might explain the bogus GET listings we get ...
