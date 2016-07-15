@@ -18,6 +18,9 @@ object ServiceHelper {
 abstract class ServiceHelper(longName: String, alias: String, base: String, version: String, checksEnabled: Boolean, actionsEnabled: Boolean)(routes: Route[Service]*) {
   val shoreditch = Shoreditch(base, version, longName, alias, "metadata", routes)
 
+  def handler(req: Request) : Option[ShoreditchResponse] =
+    firstMatchingRoute(req).map(xform(req)) orElse summaryHandler(req)
+
   type ShoreditchResponse = () ⇒ String
 
   private val basePathParts = splitPath(base)
@@ -48,10 +51,7 @@ abstract class ServiceHelper(longName: String, alias: String, base: String, vers
   private def lazyAppliedMatches(req: Request) = matchers.iterator map { _(req) }
   private def firstMatchingRoute(req: Request) = lazyAppliedMatches(req).find(_.isDefined).flatten
 
-  def handler(req: Request) : Option[ShoreditchResponse] =
-    firstMatchingRoute(req).map(xform(req)) orElse summaryHandler(req)
-
-  def xform(req: Request): (Service) => () => String = mkRunFunc(_, req)
+  private def xform(req: Request): (Service) => () => String = mkRunFunc(_, req)
 
   private def mkRunFunc(t: Service, req: Request): () ⇒ String = () ⇒ {
     t match {
