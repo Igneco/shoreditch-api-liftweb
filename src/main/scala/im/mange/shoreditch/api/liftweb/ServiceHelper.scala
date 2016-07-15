@@ -22,9 +22,9 @@ object ServiceHelper {
 abstract class ServiceHelper(longName: String, alias: String, base: String, version: String, checksEnabled: Boolean, actionsEnabled: Boolean)(offerings: Route[Service]*)
   extends EnhancedRestHelper[Service](longName, alias, base, "metadata", version)(offerings: _*) {
 
-  def xform(req: Request): (Service) => () => JValue = mkRunFunc(_, req)
+  def xform(req: Request): (Service) => () => String = mkRunFunc(_, req)
 
-  private def mkRunFunc(t: Service, req: Request): () ⇒ JValue = () ⇒ {
+  private def mkRunFunc(t: Service, req: Request): () ⇒ String = () ⇒ {
     t match {
       case a:Action if actionsEnabled ⇒ Json.serialise(Runner.run(a, req))
       case c:Check if checksEnabled ⇒ Json.serialise(Runner.run(c))

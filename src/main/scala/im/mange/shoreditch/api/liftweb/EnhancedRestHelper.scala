@@ -96,6 +96,7 @@ abstract class EnhancedRestHelper[Service](longName: String = "", alias: String 
   var actions = concurrent.TrieMap[String, Action]()
   var checks = concurrent.TrieMap[String, Check]()
 
+  //TODO: should be foreach
   routes.map(r =>
     r.service match {
     case a:Action => actions.update(base + "/" + r.pathStr, a)
@@ -104,8 +105,8 @@ abstract class EnhancedRestHelper[Service](longName: String = "", alias: String 
   })
 
 //  type ShoreditchResponse = () ⇒ LiftResponse
-  type ShoreditchResponse = () ⇒ JValue
-//  type ShoreditchResponse = () ⇒ String
+//  type ShoreditchResponse = () ⇒ JValue
+  type ShoreditchResponse = () ⇒ String
 
   private val basePathParts = splitPath(base)
 

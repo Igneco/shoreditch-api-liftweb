@@ -12,17 +12,17 @@ object Json {
 
   def serialise(r: ActionResponse) = {
     implicit val formats = theFormats
-    JsonParser.parse(write(r))
+    write(r)
   }
 
   def serialise(r: CheckResponse) = {
     implicit val formats = theFormats
-    JsonParser.parse(write(r))
+    write(r)
   }
 
-  def serialise(r: MetaDataResponse): JValue = {
+  def serialise(r: MetaDataResponse) = {
     implicit val formats = theFormats
-    JsonParser.parse(write(r))
+    write(r)
   }
 
   def deserialiseIn(json: JValue) = {
