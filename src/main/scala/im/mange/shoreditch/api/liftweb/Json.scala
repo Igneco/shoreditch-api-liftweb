@@ -20,7 +20,7 @@ object Json {
     JsonParser.parse(write(r))
   }
 
-  def serialise(r: MetaDataResponse) = {
+  def serialise(r: MetaDataResponse): JValue = {
     implicit val formats = theFormats
     JsonParser.parse(write(r))
   }

@@ -3,6 +3,8 @@ package im.mange.shoreditch.api.liftweb
 import im.mange.shoreditch.api._
 import net.liftweb.common.{Box, Full}
 import net.liftweb.http._
+import net.liftweb.json.JValue
+
 import scala.collection.concurrent
 
 //TODO: rename to AutoIndexRestHelper or something
@@ -101,7 +103,9 @@ abstract class EnhancedRestHelper[Service](longName: String = "", alias: String 
     case x => //???
   })
 
-  type ShoreditchResponse = () ⇒ LiftResponse
+//  type ShoreditchResponse = () ⇒ LiftResponse
+  type ShoreditchResponse = () ⇒ JValue
+//  type ShoreditchResponse = () ⇒ String
 
   private val basePathParts = splitPath(base)
 
@@ -119,7 +123,7 @@ abstract class EnhancedRestHelper[Service](longName: String = "", alias: String 
         val theChecks = checks.map(c => CheckMetaData(c._1)).toList
 
         val metaData = MetaDataResponse(longName, alias, version, theChecks, theActions)
-        JsonResponse(Json.serialise(metaData))
+        Json.serialise(metaData)
       }
       val summaryRoute: Route[ShoreditchResponse] = GET0(summary) {
         summaryResponse

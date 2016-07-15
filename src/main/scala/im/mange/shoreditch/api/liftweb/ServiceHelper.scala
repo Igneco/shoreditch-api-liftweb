@@ -4,6 +4,7 @@ import im.mange.shoreditch.api._
 import im.mange.shoreditch.api.liftweb.EnhancedRestHelper._
 import net.liftweb.http.{JsonResponse, LiftResponse, Req}
 import net.liftweb.common.{Box, Full}
+import net.liftweb.json.JValue
 
 object ServiceHelper {
   //TODO: if this works, add boolean generateOptionsForCors
@@ -21,12 +22,12 @@ object ServiceHelper {
 abstract class ServiceHelper(longName: String, alias: String, base: String, version: String, checksEnabled: Boolean, actionsEnabled: Boolean)(offerings: Route[Service]*)
   extends EnhancedRestHelper[Service](longName, alias, base, "metadata", version)(offerings: _*) {
 
-  def xform(req: Request): (Service) => () => LiftResponse = mkRunFunc(_, req)
+  def xform(req: Request): (Service) => () => JValue = mkRunFunc(_, req)
 
-  private def mkRunFunc(t: Service, req: Request): () ⇒ LiftResponse = () ⇒ {
+  private def mkRunFunc(t: Service, req: Request): () ⇒ JValue = () ⇒ {
     t match {
-      case a:Action if actionsEnabled ⇒ JsonResponse(Json.serialise(Runner.run(a, req)))
-      case c:Check if checksEnabled ⇒ JsonResponse(Json.serialise(Runner.run(c)))
+      case a:Action if actionsEnabled ⇒ Json.serialise(Runner.run(a, req))
+      case c:Check if checksEnabled ⇒ Json.serialise(Runner.run(c))
       case x => throw new RuntimeException("I don't know how to run a: " + x)
     }
   }
