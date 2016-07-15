@@ -8,10 +8,10 @@ import scala.collection.concurrent
 //TODO: ultimate rename Shoreditch and have one import
 object ServiceHelper {
   implicit class CheckRouteBuildingString(val path: String) extends AnyVal {
-    def action(probeFn:               ⇒ Action): Route[Service] = POST0("action/" + path)(probeFn)//,
-    def check(probeFn:                 ⇒ Check): Route[Service] = GET0("check/" + path)(probeFn)
-    def check(probeFn: (String)        ⇒ Check): Route[Service] = GET1("check/" + path)(probeFn)
-    def check(probeFn: (String,String) ⇒ Check): Route[Service] = GET2("check/" + path)(probeFn)
+    def action(f:                ⇒ Action): Route[Service] = POST0("action/" + path)(f)
+    def check(f:                 ⇒ Check): Route[Service]  = GET0("check/" + path)(f)
+    def check(f: (String)        ⇒ Check): Route[Service]  = GET1("check/" + path)(f)
+    def check(f: (String,String) ⇒ Check): Route[Service]  = GET2("check/" + path)(f)
   }
 }
 
@@ -19,8 +19,6 @@ object ServiceHelper {
 //TODO: move this stuff into a ShoreditchHandler() and have minimal stuff in Shoreditch() itself
 //TODO: and pass in a Shoreditch ..
 abstract class ServiceHelper(shoreditch: Shoreditch[Service]) {
-//  val shoreditch = Shoreditch(base, version, longName, alias, routes = routes)
-
   var actions = concurrent.TrieMap[String, Action]()
   var checks = concurrent.TrieMap[String, Check]()
 
