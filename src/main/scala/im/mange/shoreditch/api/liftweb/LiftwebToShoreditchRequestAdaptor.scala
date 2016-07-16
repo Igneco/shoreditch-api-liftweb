@@ -3,8 +3,7 @@ package im.mange.shoreditch.api.liftweb
 import im.mange.shoreditch.Shoreditch
 import im.mange.shoreditch.handler.Request
 import net.liftweb.common.Full
-import net.liftweb.http.rest.RestHelper
-import net.liftweb.http.{JsonResponse, LiftResponse, PlainTextResponse, Req}
+import net.liftweb.http.{JsonResponse, PlainTextResponse, Req}
 import net.liftweb.json.Serialization._
 import net.liftweb.json._
 
